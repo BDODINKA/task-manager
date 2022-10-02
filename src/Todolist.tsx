@@ -26,27 +26,28 @@ type PropsType = {
 }
 
 export const Todolist = React.memo(function (props: PropsType) {
+    const {id,addTask, removeTodolist,changeTodolistTitle,changeFilter}:PropsType=props
     console.log('Todolist called')
     const dispatch = useDispatch()
 
     useEffect(()=>{
-        dispatch(SetTasksTC(props.id))
-    },[])
+        dispatch(SetTasksTC(id))
+    },[dispatch,id])
 
-    const addTask = useCallback((title: string) => {
-        props.addTask(title, props.id)
-    }, [props.addTask, props.id])
+    const addTaskCallBack = useCallback((title: string) => {
+        addTask(title, id)
+    }, [addTask, id])
 
-    const removeTodolist = () => {
-        props.removeTodolist(props.id)
+    const removeTodolistHandler = () => {
+        removeTodolist(id)
     }
-    const changeTodolistTitle = useCallback((title: string) => {
-        props.changeTodolistTitle(props.id, title)
-    }, [props.id, props.changeTodolistTitle])
+    const changeTodolistTitleHandler = useCallback((title: string) => {
+        changeTodolistTitle(id, title)
+    }, [id, changeTodolistTitle])
 
-    const onAllClickHandler = useCallback(() => props.changeFilter('all', props.id), [props.id, props.changeFilter])
-    const onActiveClickHandler = useCallback(() => props.changeFilter('active', props.id), [props.id, props.changeFilter])
-    const onCompletedClickHandler = useCallback(() => props.changeFilter('completed', props.id), [props.id, props.changeFilter])
+    const onAllClickHandler = useCallback(() => changeFilter('all', id), [id, changeFilter])
+    const onActiveClickHandler = useCallback(() => changeFilter('active',id), [id, changeFilter])
+    const onCompletedClickHandler = useCallback(() => changeFilter('completed',id), [id, changeFilter])
 
 
     let tasksForTodolist = props.tasks
@@ -59,12 +60,12 @@ export const Todolist = React.memo(function (props: PropsType) {
     }
 
     return <div>
-        <h3><EditableSpan value={props.title} onChange={changeTodolistTitle}/>
-            <IconButton onClick={removeTodolist}>
+        <h3><EditableSpan value={props.title} onChange={changeTodolistTitleHandler}/>
+            <IconButton onClick={removeTodolistHandler}>
                 <Delete/>
             </IconButton>
         </h3>
-        <AddItemForm addItem={addTask}/>
+        <AddItemForm addItem={addTaskCallBack}/>
         <div>
             {
                 tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={props.id}

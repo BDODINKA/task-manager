@@ -39,39 +39,39 @@ function App() {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(SetTodolistsTC())
-    }, [])
+    }, [dispatch])
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
 
     const removeTask = useCallback(function (id: string, todolistId: string) {
         dispatch(DeleteTaskTC(todolistId, id));
-    }, []);
+    }, [dispatch]);
 
     const addTask = useCallback(function (title: string, todolistId: string) {
         dispatch(AddTaskTC(title, todolistId));
-    }, []);
+    }, [dispatch]);
 
     const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
         dispatch(UpdateTaskStatusTC(id, status, todolistId))
-    }, []);
+    }, [dispatch]);
 
     const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
         dispatch(ChangeTaskTitleTC(id, newTitle, todolistId));
-    }, []);
+    }, [dispatch]);
 
     const changeFilter = useCallback(function (value: FilterValuesType, todolistId: string) {
         const action = changeTodolistFilterAC(todolistId, value);
         dispatch(action);
-    }, []);
+    }, [dispatch]);
 
     const removeTodolist = useCallback(function (id: string) {
         dispatch(DeleteTodolistTC(id));
-    }, []);
+    }, [dispatch]);
 
     const changeTodolistTitle = useCallback(function (id: string, title: string) {
         dispatch(ChangeTodolistTitleTC(id, title));
-    }, []);
+    }, [dispatch]);
 
     const addTodolist = useCallback((title: string) => {
         dispatch(AddTodolistsTC(title));

@@ -21,13 +21,12 @@ import {
 } from './state/todolists-reducer'
 import {
     AddTaskTC,
-    ChangeTaskTitleTC,
     DeleteTaskTC,
-    UpdateTaskStatusTC
+    UpdateTaskTC, UpdateTaskType
 } from './state/tasks-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './state/store';
-import {TaskStatuses, TaskType} from './api/todolists-api'
+import { TaskType} from './api/todolists-api'
 
 
 export type TasksStateType = {
@@ -52,12 +51,8 @@ function App() {
         dispatch(AddTaskTC(title, todolistId));
     }, [dispatch]);
 
-    const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
-        dispatch(UpdateTaskStatusTC(id, status, todolistId))
-    }, [dispatch]);
-
-    const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
-        dispatch(ChangeTaskTitleTC(id, newTitle, todolistId));
+    const changeTask = useCallback(function (id: string, todolistId: string, value: UpdateTaskType) {
+        dispatch(UpdateTaskTC(id, todolistId, value));
     }, [dispatch]);
 
     const changeFilter = useCallback(function (value: FilterValuesType, todolistId: string) {
@@ -108,10 +103,9 @@ function App() {
                                         removeTask={removeTask}
                                         changeFilter={changeFilter}
                                         addTask={addTask}
-                                        changeTaskStatus={changeStatus}
                                         filter={tl.filter}
                                         removeTodolist={removeTodolist}
-                                        changeTaskTitle={changeTaskTitle}
+                                        changeTask={changeTask}
                                         changeTodolistTitle={changeTodolistTitle}
                                     />
                                 </Paper>

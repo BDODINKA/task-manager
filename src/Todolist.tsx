@@ -8,7 +8,7 @@ import {Task} from './Task'
 import {TaskStatuses, TaskType} from './api/todolists-api'
 import {FilterValuesType} from './state/todolists-reducer'
 import {useDispatch} from "react-redux";
-import {SetTasksTC} from "./state/tasks-reducer";
+import {SetTasksTC, UpdateTaskType} from "./state/tasks-reducer";
 
 type PropsType = {
     id: string
@@ -16,17 +16,16 @@ type PropsType = {
     tasks: Array<TaskType>
     changeFilter: (value: FilterValuesType, todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
-    changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
-    changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
     removeTask: (taskId: string, todolistId: string) => void
     removeTodolist: (id: string) => void
     changeTodolistTitle: (id: string, newTitle: string) => void
     filter: FilterValuesType
+    changeTask:(id: string, todolistId: string, value: UpdateTaskType)=>void
 
 }
 
 export const Todolist = React.memo(function (props: PropsType) {
-    const {id,addTask, removeTodolist,changeTodolistTitle,changeFilter}:PropsType=props
+    const {id,addTask, removeTodolist,changeTodolistTitle,changeFilter,changeTask}:PropsType=props
     console.log('Todolist called')
     const dispatch = useDispatch()
 
@@ -70,8 +69,7 @@ export const Todolist = React.memo(function (props: PropsType) {
             {
                 tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={props.id}
                                           removeTask={props.removeTask}
-                                          changeTaskTitle={props.changeTaskTitle}
-                                          changeTaskStatus={props.changeTaskStatus}
+                                                changeTask={changeTask}
                     />)
             }
         </div>

@@ -1,9 +1,11 @@
 import React, { ChangeEvent, useState } from 'react';
 import TextField from '@mui/material/TextField';
+import {LoadType} from "../state/app-reducer";
 
 type EditableSpanPropsType = {
     value: string
     onChange: (newValue: string) => void
+    entityStatus:LoadType
 }
 
 export const EditableSpan = React.memo(function (props: EditableSpanPropsType) {
@@ -23,7 +25,7 @@ export const EditableSpan = React.memo(function (props: EditableSpanPropsType) {
         setTitle(e.currentTarget.value)
     }
 
-    return editMode
+    return editMode && props.entityStatus !=='loading'
         ? <TextField value={title} onChange={changeTitle} autoFocus onBlur={activateViewMode}/>
         : <span onDoubleClick={activateEditMode}>{props.value}</span>
 });

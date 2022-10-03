@@ -1,5 +1,7 @@
 import {todolistsAPI, TodolistType} from '../api/todolists-api'
 import {Dispatch} from "redux";
+import {LoadType, PreloaderAC} from "./app-reducer";
+import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
 
 
 export type ChangeTodolistFilterActionType = {
@@ -12,12 +14,14 @@ export type SetTodolistsActionType = ReturnType<typeof SetTodolistsAC>
 export  type AddTodolistActionType = ReturnType<typeof addTodolistAC>
 export  type ChangeTodolistTitleActionType = ReturnType<typeof changeTodolistTitleAC>
 export  type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>
+export  type SetStatusActionType = ReturnType<typeof SetStatusAC>
 
 type ActionsType = RemoveTodolistActionType
     | AddTodolistActionType
     | ChangeTodolistTitleActionType
     | ChangeTodolistFilterActionType
     | SetTodolistsActionType
+    | SetStatusActionType
 
 const initialState: Array<TodolistDomainType> = [
     /*{id: todolistId1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
@@ -27,6 +31,7 @@ const initialState: Array<TodolistDomainType> = [
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodolistDomainType = TodolistType & {
     filter: FilterValuesType
+    entityStatus: LoadType
 }
 
 export const todolistsReducer = (state: Array<TodolistDomainType> = initialState, action: ActionsType): Array<TodolistDomainType> => {
@@ -40,7 +45,8 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
                 title: action.title,
                 filter: 'all',
                 addedDate: '',
-                order: 0
+                order: 0,
+                entityStatus: "succeed"
             }, ...state]
         }
         case 'CHANGE-TODOLIST-TITLE': {
@@ -58,8 +64,14 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
             return [...state]
         }
         case "SET-TODOLISTS": {
-            return action.todolists.map(tl => ({...tl, filter: 'all'}))
+            return action.todolists.map(tl => ({...tl, filter: 'all', entityStatus: "succeed"}))
         }
+        case "SET-STATUS": {
+            return state.map(tl => tl.id === action.payload.id ? {
+                ...tl, entityStatus: action.payload.status
+            } : tl)
+        }
+
         default:
             return state;
     }
@@ -78,31 +90,79 @@ export const changeTodolistFilterAC = (id: string, filter: FilterValuesType): Ch
     return {type: 'CHANGE-TODOLIST-FILTER', id: id, filter: filter}
 }
 export const SetTodolistsAC = (todolists: TodolistType[]) => {
-    return {type: 'SET-TODOLISTS', todolists} as const
+    return {type: 'SET-TODOLISTS', todolists: todolists} as const
+}
+export const SetStatusAC = (id: string, status: LoadType) => {
+    return {type: 'SET-STATUS', payload: {id, status}} as const
 }
 
+
 export const SetTodolistsTC = () => {
-    return (dispath: Dispatch) => {
+    return (dispatch: Dispatch) => {
+        dispatch(PreloaderAC('loading'))
         todolistsAPI.getTodolists()
-            .then((res) => dispath(SetTodolistsAC(res.data)))
+            .then((res) => {
+                    dispatch(SetTodolistsAC(res.data))
+                    dispatch(PreloaderAC('succeed'))
+                }
+            )
+            .catch((reason) => {
+                NetworkErrorHandler(reason, dispatch)
+            })
     }
 }
 export const AddTodolistsTC = (title: string) => {
-    return (dispath: Dispatch) => {
+    return (dispatch: Dispatch) => {
+        dispatch(PreloaderAC('loading'))
         todolistsAPI.createTodolist(title)
-            .then((res) => dispath(addTodolistAC(res.data.data.item.title, res.data.data.item.id)))
+            .then((res) => {
+                if (res.data.resultCode === 0) {
+                    dispatch(addTodolistAC(res.data.data.item.title, res.data.data.item.id))
+                    dispatch(PreloaderAC('succeed'))
+                } else {
+                    ServerErrorHandler<string>(res.data.messages[0], dispatch)
+                }
+            }).catch((reason) => {
+                NetworkErrorHandler(reason, dispatch)
+            }
+        )
     }
 }
 export const ChangeTodolistTitleTC = (id: string, title: string) => {
-    return (dispath: Dispatch) => {
+    return (dispatch: Dispatch) => {
+        dispatch(PreloaderAC('loading'))
+        dispatch(SetStatusAC(id,'loading'))
         todolistsAPI.updateTodolist(id, title)
-            .then(() => dispath(changeTodolistTitleAC(id, title)))
+            .then((res) => {
+                if (res.data.resultCode === 0) {
+                    dispatch(changeTodolistTitleAC(id, title))
+                    dispatch(PreloaderAC('idle'))
+                } else {
+                    ServerErrorHandler<string>(res.data.messages[0], dispatch)
+                }
+                dispatch(SetStatusAC(id,'idle'))
+            }).catch(
+            (reason) => {
+                NetworkErrorHandler(reason, dispatch)
+            })
     }
 }
 export const DeleteTodolistTC = (id: string) => {
-    return (dispath: Dispatch) => {
+    return (dispatch: Dispatch) => {
+        dispatch(PreloaderAC('loading'))
+        dispatch(SetStatusAC(id, "loading"))
         todolistsAPI.deleteTodolist(id)
-            .then(() => dispath(removeTodolistAC(id)))
+            .then((res) => {
+                if (res.data.resultCode === 0) {
+                    dispatch(removeTodolistAC(id))
+                    dispatch(PreloaderAC('succeed'))
+                } else {
+                    ServerErrorHandler<string>(res.data.messages[0], dispatch)
+                }
+            })
+            .catch(reason => {
+                NetworkErrorHandler(reason, dispatch)
+            })
     }
 }
 

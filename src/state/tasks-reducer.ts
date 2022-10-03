@@ -1,14 +1,22 @@
 import {TasksStateType} from '../App';
-import {AddTodolistActionType, RemoveTodolistActionType, SetTodolistsActionType} from './todolists-reducer';
+import {
+    AddTodolistActionType,
+    RemoveTodolistActionType,
+    SetTodolistsActionType
+} from './todolists-reducer';
 import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI} from '../api/todolists-api'
 import {Dispatch} from "redux";
 import {AppRootStateType} from "./store";
+import {LoadType, PreloaderAC} from "./app-reducer";
+import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
+
 
 
 export type SetTasksType = ReturnType<typeof SetTasksAC>
 export type AddTaskActionType = ReturnType<typeof addTaskAC>
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
 export type ChangeTaskActionType = ReturnType<typeof changeTaskAC>
+export type SetTaskStatusActionType = ReturnType<typeof SetTaskStatusAC>
 
 
 type ActionsType = RemoveTaskActionType
@@ -18,6 +26,7 @@ type ActionsType = RemoveTaskActionType
     | RemoveTodolistActionType
     | SetTodolistsActionType
     | SetTasksType
+    | SetTaskStatusActionType
 
 const initialState: TasksStateType = {
     /*"todolistId1": [
@@ -83,6 +92,14 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
             stateCopy[action.TodolistID] = action.Tasks
             return stateCopy
         }
+
+        case "Task/SET-STATUS":{
+            return {
+                ...state,[action.payload.todolistId]:
+                    state[action.payload.todolistId].
+                    map(t=>t.id === action.payload.id ? {...t,entityStatus:action.payload.status}:t)
+            }
+        }
         default:
             return state;
     }
@@ -101,26 +118,68 @@ export const changeTaskAC = (model: TaskType) => {
 export const SetTasksAC = (Tasks: TaskType[], TodolistID: string) => {
     return {type: 'SET-TASKS', Tasks, TodolistID} as const
 }
+export const SetTaskStatusAC = (todolistId:string,id: string, status: LoadType) => {
+    return {type: 'Task/SET-STATUS', payload: {todolistId,id, status}} as const
+}
 
 export const SetTasksTC = (TodolistID: string) => {
-    return (dispath: Dispatch) => {
+    return (dispatch: Dispatch) => {
+        dispatch(PreloaderAC('loading'))
         todolistsAPI.getTasks(TodolistID)
-            .then((res) => dispath(SetTasksAC(res.data.items, TodolistID)))
+            .then((res) => {
+                if (res.data.error) {
+                    ServerErrorHandler<string>(res.data.error, dispatch)
+                } else {
+                    dispatch(SetTasksAC(res.data.items, TodolistID))
+                    dispatch(PreloaderAC('succeed'))
+                }
+            })
+            .catch((reason) => {
+                NetworkErrorHandler(reason, dispatch)
+            })
     }
 }
+
+
+
 export const AddTaskTC = (title: string, TodolistID: string) => {
-    return (dispath: Dispatch) => {
+    return (dispatch: Dispatch) => {
+        dispatch(PreloaderAC('loading'))
         todolistsAPI.createTask(TodolistID, title)
-            .then((res) => dispath(addTaskAC(res.data.data.item)))
+            .then((res) => {
+                if (res.data.resultCode === 0) {
+                    dispatch(addTaskAC(res.data.data.item))
+                    dispatch(PreloaderAC('succeed'))
+                } else {
+                    ServerErrorHandler<string>(res.data.messages[0], dispatch)
+                }
+            })
+            .catch((reason) => {
+                NetworkErrorHandler(reason, dispatch)
+            })
+
+
     }
 }
 export const DeleteTaskTC = (todolistId: string, taskId: string) => {
-    return (dispath: Dispatch) => {
+    return (dispatch: Dispatch) => {
+        dispatch(PreloaderAC('loading'))
+        dispatch(SetTaskStatusAC(todolistId,taskId,'loading'))
         todolistsAPI.deleteTask(todolistId, taskId)
-            .then(() => dispath(removeTaskAC(todolistId, taskId)))
+            .then((res) => {
+                if (res.data.resultCode === 0) {
+                    dispatch(removeTaskAC(todolistId, taskId))
+                    dispatch(PreloaderAC('succeed'))
+                } else {
+                    ServerErrorHandler<string>(res.data.messages[0],dispatch)
+                }
+                dispatch(SetTaskStatusAC(todolistId,taskId,'idle'))
+            })
+            .catch((reason) => {
+                NetworkErrorHandler(reason, dispatch)
+            })
     }
 }
-
 export type UpdateTaskType = {
     title?: string
     description?: string
@@ -132,6 +191,8 @@ export type UpdateTaskType = {
 
 export const UpdateTaskTC = (id: string, todolistId: string, value: UpdateTaskType) => {
     return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+        dispatch(PreloaderAC('loading'))
+        dispatch(SetTaskStatusAC(todolistId,id,'loading'))
         const task = getState().tasks[todolistId].find(t => t.id === id)
         if (task) {
             const model = {
@@ -139,7 +200,18 @@ export const UpdateTaskTC = (id: string, todolistId: string, value: UpdateTaskTy
                 ...value
             }
             todolistsAPI.updateTask(todolistId, id, model)
-                .then((res) => dispatch(changeTaskAC(res.data.data.item)))
+                .then((res) => {
+                    if (res.data.resultCode === 0) {
+                        dispatch(changeTaskAC(res.data.data.item))
+                        dispatch(PreloaderAC('idle'))
+                    } else {
+                        ServerErrorHandler<string>(res.data.messages[0], dispatch)
+                    }
+                    dispatch(SetTaskStatusAC(todolistId,id,'idle'))
+                })
+                .catch((reason) => {
+                    NetworkErrorHandler(reason, dispatch)
+                })
 
         }
     }

@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react'
 import './App.css';
-import {Todolist} from './Todolist';
-import {AddItemForm} from './AddItemForm';
+import {Todolist} from './components/Todolist';
+import {AddItemForm} from './components/AddItemForm';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import {Menu} from '@mui/icons-material';
+import Menu from '@mui/icons-material/Menu';
 import {
     AddTodolistsTC,
     changeTodolistFilterAC,
@@ -27,6 +27,9 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './state/store';
 import { TaskType} from './api/todolists-api'
+import LinearProgress  from '@mui/material/LinearProgress';
+import {LoadStateType} from "./state/app-reducer";
+import {ErrorComponent} from "./components/ErrorComponent";
 
 
 export type TasksStateType = {
@@ -39,9 +42,11 @@ function App() {
     useEffect(() => {
         dispatch(SetTodolistsTC())
     }, [dispatch])
-
+    const Load = useSelector<AppRootStateType, LoadStateType>(state => state.app)
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+
+    console.log(Load)
 
     const removeTask = useCallback(function (id: string, todolistId: string) {
         dispatch(DeleteTaskTC(todolistId, id));
@@ -84,6 +89,8 @@ function App() {
                     </Typography>
                     <Button color="inherit">Login</Button>
                 </Toolbar>
+                {Load.loading === 'loading' && <LinearProgress/>}
+
             </AppBar>
             <Container fixed>
                 <Grid container style={{padding: '20px'}}>
@@ -103,6 +110,7 @@ function App() {
                                         removeTask={removeTask}
                                         changeFilter={changeFilter}
                                         addTask={addTask}
+                                        entityStatus={tl.entityStatus}
                                         filter={tl.filter}
                                         removeTodolist={removeTodolist}
                                         changeTask={changeTask}
@@ -114,6 +122,7 @@ function App() {
                     }
                 </Grid>
             </Container>
+            <ErrorComponent Load={Load}/>
         </div>
     );
 }

@@ -1,15 +1,15 @@
 import React, {useCallback, useEffect} from 'react'
 import './App.css';
-import {Todolist} from './components/Todolist';
-import {AddItemForm} from './components/AddItemForm';
+// import {Todolist} from './components/Todolist';
+// import {AddItemForm} from './components/AddItemForm';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
+// import Container from '@mui/material/Container';
+// import Grid from '@mui/material/Grid';
+// import Paper from '@mui/material/Paper';
 import Menu from '@mui/icons-material/Menu';
 import {
     AddTodolistsTC,
@@ -26,10 +26,13 @@ import {
 } from './state/tasks-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './state/store';
-import { TaskType} from './api/todolists-api'
-import LinearProgress  from '@mui/material/LinearProgress';
+import {TaskType} from './api/todolists-api'
+import LinearProgress from '@mui/material/LinearProgress';
 import {LoadStateType} from "./state/app-reducer";
 import {ErrorComponent} from "./components/ErrorComponent";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Todolists from "./components/Todolists";
+import {Login} from "./components/Login";
 
 
 export type TasksStateType = {
@@ -90,38 +93,56 @@ function App() {
                     <Button color="inherit">Login</Button>
                 </Toolbar>
                 {Load.loading === 'loading' && <LinearProgress/>}
-
             </AppBar>
-            <Container fixed>
-                <Grid container style={{padding: '20px'}}>
-                    <AddItemForm addItem={addTodolist}/>
-                </Grid>
-                <Grid container spacing={3}>
-                    {
-                        todolists.map(tl => {
-                            let allTodolistTasks = tasks[tl.id];
-
-                            return <Grid item key={tl.id}>
-                                <Paper style={{padding: '10px'}}>
-                                    <Todolist
-                                        id={tl.id}
-                                        title={tl.title}
-                                        tasks={allTodolistTasks}
-                                        removeTask={removeTask}
-                                        changeFilter={changeFilter}
-                                        addTask={addTask}
-                                        entityStatus={tl.entityStatus}
-                                        filter={tl.filter}
-                                        removeTodolist={removeTodolist}
-                                        changeTask={changeTask}
-                                        changeTodolistTitle={changeTodolistTitle}
-                                    />
-                                </Paper>
-                            </Grid>
-                        })
-                    }
-                </Grid>
-            </Container>
+            <BrowserRouter>
+                <Routes>
+                    <Route path={'/Login'} element={<Login/>}/>
+                    <Route path={'*'} element={<h1>Page Not Found 404</h1>}/>
+                    <Route path={'/'}
+                           element={
+                               <Todolists
+                                   addItem={addTodolist}
+                                   removeTask={removeTask}
+                                   changeFilter={changeFilter}
+                                   addTask={addTask}
+                                   removeTodolist={removeTodolist}
+                                   changeTask={changeTask}
+                                   changeTodolistTitle={changeTodolistTitle}
+                                   tasks={tasks}
+                                   todolists={todolists}
+                               />
+                           }/>
+                </Routes>
+            </BrowserRouter>
+            {/*<Container fixed>*/}
+            {/*    <Grid container style={{padding: '20px'}}>*/}
+            {/*        <AddItemForm addItem={addTodolist}/>*/}
+            {/*    </Grid>*/}
+            {/*    <Grid container spacing={3}>*/}
+            {/*        {*/}
+            {/*            todolists.map(tl => {*/}
+            {/*                let allTodolistTasks = tasks[tl.id];*/}
+            {/*                return <Grid item key={tl.id}>*/}
+            {/*                    <Paper style={{padding: '10px'}}>*/}
+            {/*                        <Todolist*/}
+            {/*                            id={tl.id}*/}
+            {/*                            title={tl.title}*/}
+            {/*                            tasks={allTodolistTasks}*/}
+            {/*                            removeTask={removeTask}*/}
+            {/*                            changeFilter={changeFilter}*/}
+            {/*                            addTask={addTask}*/}
+            {/*                            entityStatus={tl.entityStatus}*/}
+            {/*                            filter={tl.filter}*/}
+            {/*                            removeTodolist={removeTodolist}*/}
+            {/*                            changeTask={changeTask}*/}
+            {/*                            changeTodolistTitle={changeTodolistTitle}*/}
+            {/*                        />*/}
+            {/*                    </Paper>*/}
+            {/*                </Grid>*/}
+            {/*            })*/}
+            {/*        }*/}
+            {/*    </Grid>*/}
+            {/*</Container>*/}
             <ErrorComponent Load={Load}/>
         </div>
     );

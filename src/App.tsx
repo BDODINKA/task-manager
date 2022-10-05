@@ -30,7 +30,7 @@ import {TaskType} from './api/todolists-api'
 import LinearProgress from '@mui/material/LinearProgress';
 import {LoadStateType} from "./state/app-reducer";
 import {ErrorComponent} from "./components/ErrorComponent";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Todolists from "./components/Todolists";
 import {Login} from "./components/Login";
 
@@ -48,8 +48,8 @@ function App() {
     const Load = useSelector<AppRootStateType, LoadStateType>(state => state.app)
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    const isLogin = useSelector<AppRootStateType>(state=>state.auth)
 
-    console.log(Load)
 
     const removeTask = useCallback(function (id: string, todolistId: string) {
         dispatch(DeleteTaskTC(todolistId, id));
@@ -97,7 +97,8 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path={'/Login'} element={<Login/>}/>
-                    <Route path={'*'} element={<h1>Page Not Found 404</h1>}/>
+                    <Route path={'/404'} element={<h1>404:Page not Found</h1>}/>
+                    <Route path={'*'} element={<Navigate to={'/404'}/>}/>
                     <Route path={'/'}
                            element={
                                <Todolists

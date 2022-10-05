@@ -96,8 +96,7 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
         case "Task/SET-STATUS":{
             return {
                 ...state,[action.payload.todolistId]:
-                    state[action.payload.todolistId].
-                    map(t=>t.id === action.payload.id ? {...t,entityStatus:action.payload.status}:t)
+                    state[action.payload.todolistId].map(t=>t.id === action.payload.id ? {...t,entityStatus:action.payload.status}:t)
             }
         }
         default:

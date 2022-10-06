@@ -33,6 +33,7 @@ import {ErrorComponent} from "./components/ErrorComponent";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Todolists from "./components/Todolists";
 import {Login} from "./components/Login";
+import {AuthStateType} from "./state/auth-reducer";
 
 
 export type TasksStateType = {
@@ -41,14 +42,21 @@ export type TasksStateType = {
 
 
 function App() {
+
+    const isLogin = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
     const dispatch = useDispatch()
+
     useEffect(() => {
-        dispatch(SetTodolistsTC())
-    }, [dispatch])
+        if (!isLogin.isLogin) {
+            return
+        } else {
+            dispatch(SetTodolistsTC())
+        }
+    }, [dispatch, isLogin])
+
     const Load = useSelector<AppRootStateType, LoadStateType>(state => state.app)
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
-    const isLogin = useSelector<AppRootStateType>(state=>state.auth)
 
 
     const removeTask = useCallback(function (id: string, todolistId: string) {
@@ -79,6 +87,7 @@ function App() {
     const addTodolist = useCallback((title: string) => {
         dispatch(AddTodolistsTC(title));
     }, [dispatch]);
+
 
     return (
         <div className="App">
@@ -147,6 +156,7 @@ function App() {
             <ErrorComponent Load={Load}/>
         </div>
     );
+
 }
 
 export default App;

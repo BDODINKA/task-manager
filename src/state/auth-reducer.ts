@@ -1,7 +1,9 @@
 import {Dispatch} from "redux";
 import {AuthAPI, LoginParamsType} from "../api/auth-api";
+import {PreloaderAC} from "./app-reducer";
+import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
 
-type initialStateType = typeof initialState
+export type AuthStateType = typeof initialState
 type AllActions = ReturnType<typeof LoginAC>
 
 const initialState = {
@@ -9,7 +11,7 @@ const initialState = {
 }
 
 
-export const AuthReducer = (state: initialStateType=initialState, action: AllActions) => {
+export const AuthReducer = (state: AuthStateType=initialState, action: AllActions) => {
     switch (action.type) {
         case "Login":{
                 return action.payload && {...state,isLogin: true}
@@ -31,11 +33,14 @@ const LoginAC = (userID:number)=>{
 export const LoginTC = (values:LoginParamsType) => (dispatch:Dispatch)=>{
     return AuthAPI.auth(values)
         .then(res=>{
+            dispatch(PreloaderAC('loading'))
             if(res.data.resultCode === 0){
-                console.log(res.data.data.userId)
                 dispatch(LoginAC(res.data.data.userId))
+                dispatch(PreloaderAC('succeed'))
             }else{
-                console.log(res.data)
+                ServerErrorHandler<string>(res.data.messages[0], dispatch)
             }
+        }).catch(reason => {
+            NetworkErrorHandler(reason, dispatch)
         })
 }

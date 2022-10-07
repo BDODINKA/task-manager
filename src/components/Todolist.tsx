@@ -1,14 +1,14 @@
-import React, {useCallback, useEffect} from 'react'
+import React, {useCallback} from 'react'
 import {AddItemForm} from './AddItemForm'
 import {EditableSpan} from './EditableSpan'
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-import { Delete } from '@mui/icons-material';
+import {Delete} from '@mui/icons-material';
 import {Task} from './Task'
-import {TaskStatuses, TaskType} from './api/todolists-api'
-import {FilterValuesType} from './state/todolists-reducer'
-import {useDispatch} from "react-redux";
-import {SetTasksTC} from "./state/tasks-reducer";
+import {TaskStatuses, TaskType} from '../api/todolists-api'
+import {FilterValuesType} from '../state/todolists-reducer'
+import {UpdateTaskType} from "../state/tasks-reducer";
+import {LoadType} from "../state/app-reducer";
 
 type PropsType = {
     id: string
@@ -16,37 +16,33 @@ type PropsType = {
     tasks: Array<TaskType>
     changeFilter: (value: FilterValuesType, todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
-    changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
-    changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
     removeTask: (taskId: string, todolistId: string) => void
     removeTodolist: (id: string) => void
     changeTodolistTitle: (id: string, newTitle: string) => void
     filter: FilterValuesType
-
+    changeTask: (id: string, todolistId: string, value: UpdateTaskType) => void
+    entityStatus: LoadType
 }
 
 export const Todolist = React.memo(function (props: PropsType) {
+    const {id, addTask, removeTodolist, changeTodolistTitle, changeFilter, changeTask, entityStatus}: PropsType = props
     console.log('Todolist called')
-    const dispatch = useDispatch()
 
-    useEffect(()=>{
-        dispatch(SetTasksTC(props.id))
-    },[])
 
-    const addTask = useCallback((title: string) => {
-        props.addTask(title, props.id)
-    }, [props.addTask, props.id])
+    const addTaskCallBack = useCallback((title: string) => {
+        addTask(title, id)
+    }, [addTask, id])
 
-    const removeTodolist = () => {
-        props.removeTodolist(props.id)
+    const removeTodolistHandler = () => {
+        removeTodolist(id)
     }
-    const changeTodolistTitle = useCallback((title: string) => {
-        props.changeTodolistTitle(props.id, title)
-    }, [props.id, props.changeTodolistTitle])
+    const changeTodolistTitleHandler = useCallback((title: string) => {
+        changeTodolistTitle(id, title)
+    }, [id, changeTodolistTitle])
 
-    const onAllClickHandler = useCallback(() => props.changeFilter('all', props.id), [props.id, props.changeFilter])
-    const onActiveClickHandler = useCallback(() => props.changeFilter('active', props.id), [props.id, props.changeFilter])
-    const onCompletedClickHandler = useCallback(() => props.changeFilter('completed', props.id), [props.id, props.changeFilter])
+    const onAllClickHandler = useCallback(() => changeFilter('all', id), [id, changeFilter])
+    const onActiveClickHandler = useCallback(() => changeFilter('active', id), [id, changeFilter])
+    const onCompletedClickHandler = useCallback(() => changeFilter('completed', id), [id, changeFilter])
 
 
     let tasksForTodolist = props.tasks
@@ -59,19 +55,22 @@ export const Todolist = React.memo(function (props: PropsType) {
     }
 
     return <div>
-        <h3><EditableSpan value={props.title} onChange={changeTodolistTitle}/>
-            <IconButton onClick={removeTodolist}>
+        <h3>
+            <EditableSpan value={props.title} onChange={changeTodolistTitleHandler} entityStatus={props.entityStatus}/>
+            <IconButton
+                onClick={removeTodolistHandler}
+                disabled={entityStatus === 'loading'}>
                 <Delete/>
             </IconButton>
         </h3>
-        <AddItemForm addItem={addTask}/>
+        <AddItemForm addItem={addTaskCallBack} entityStatus={entityStatus}/>
         <div>
             {
                 tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={props.id}
-                                          removeTask={props.removeTask}
-                                          changeTaskTitle={props.changeTaskTitle}
-                                          changeTaskStatus={props.changeTaskStatus}
-                    />)
+                                                removeTask={props.removeTask}
+                                                changeTask={changeTask}
+                                                entityStatus={t.entityStatus}
+                />)
             }
         </div>
         <div style={{paddingTop: '10px'}}>

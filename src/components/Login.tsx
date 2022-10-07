@@ -20,9 +20,8 @@ type FormikErrorType = {
 }
 
 export const Login = () => {
+
     const isLogin = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
-
-
     const dispatch = useDispatch()
     const formik = useFormik({
         initialValues: {
@@ -55,7 +54,6 @@ export const Login = () => {
     if (isLogin.isLogin) {
         return <Navigate to={'/'}/>
     }
-
     return (
         <Grid container justifyContent={'center'}>
             <Grid item justifyContent={'center'}>
@@ -69,9 +67,6 @@ export const Login = () => {
                         <FormGroup>
                             <TextField label="Email"
                                        margin="normal"
-                                // name="email"
-                                // onChange={formik.handleChange}
-                                // value={formik.values.email}
                                        {...formik.getFieldProps('email')}
                             />
                             {formik.touched.email && formik.errors.email ?
@@ -79,9 +74,6 @@ export const Login = () => {
                             <TextField type="password"
                                        label="Password"
                                        margin="normal"
-                                // name="password"
-                                // onChange={formik.handleChange}
-                                // value={formik.values.password}
                                        {...formik.getFieldProps('password')}
                             />
                             {formik.touched.password && formik.errors.password ?

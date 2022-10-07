@@ -1,6 +1,6 @@
-import {TasksStateType} from '../App';
+
 import {
-    AddTodolistActionType,
+    AddTodolistActionType, ClearTodolistsActionType,
     RemoveTodolistActionType,
     SetTodolistsActionType
 } from './todolists-reducer';
@@ -9,6 +9,7 @@ import {Dispatch} from "redux";
 import {AppRootStateType} from "./store";
 import {LoadType, PreloaderAC} from "./app-reducer";
 import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
+import {TasksStateType} from "../components/Todolists";
 
 
 
@@ -27,6 +28,7 @@ type ActionsType = RemoveTaskActionType
     | SetTodolistsActionType
     | SetTasksType
     | SetTaskStatusActionType
+    | ClearTodolistsActionType
 
 const initialState: TasksStateType = {
     /*"todolistId1": [
@@ -99,6 +101,10 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
                     state[action.payload.todolistId].map(t=>t.id === action.payload.id ? {...t,entityStatus:action.payload.status}:t)
             }
         }
+        case "CLEAR-TODOLIST":{
+            return {}
+        }
+
         default:
             return state;
     }
@@ -120,6 +126,8 @@ export const SetTasksAC = (Tasks: TaskType[], TodolistID: string) => {
 export const SetTaskStatusAC = (todolistId:string,id: string, status: LoadType) => {
     return {type: 'Task/SET-STATUS', payload: {todolistId,id, status}} as const
 }
+
+
 
 export const SetTasksTC = (TodolistID: string) => {
     return (dispatch: Dispatch) => {

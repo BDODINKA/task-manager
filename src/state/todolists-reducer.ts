@@ -2,6 +2,7 @@ import {todolistsAPI, TodolistType} from '../api/todolists-api'
 import {Dispatch} from "redux";
 import {LoadType, PreloaderAC} from "./app-reducer";
 import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
+import {SetTasksTC} from "./tasks-reducer";
 
 
 export type ChangeTodolistFilterActionType = {
@@ -15,6 +16,8 @@ export  type AddTodolistActionType = ReturnType<typeof addTodolistAC>
 export  type ChangeTodolistTitleActionType = ReturnType<typeof changeTodolistTitleAC>
 export  type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>
 export  type SetStatusActionType = ReturnType<typeof SetStatusAC>
+export  type ClearTodolistsActionType = ReturnType<typeof ClearTodolistsAC>
+
 
 type ActionsType = RemoveTodolistActionType
     | AddTodolistActionType
@@ -22,6 +25,8 @@ type ActionsType = RemoveTodolistActionType
     | ChangeTodolistFilterActionType
     | SetTodolistsActionType
     | SetStatusActionType
+    | ClearTodolistsActionType
+
 
 const initialState: Array<TodolistDomainType> = [
     /*{id: todolistId1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
@@ -71,6 +76,9 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
                 ...tl, entityStatus: action.payload.status
             } : tl)
         }
+        case "CLEAR-TODOLIST":{
+            return []
+        }
 
         default:
             return state;
@@ -95,17 +103,23 @@ export const SetTodolistsAC = (todolists: TodolistType[]) => {
 export const SetStatusAC = (id: string, status: LoadType) => {
     return {type: 'SET-STATUS', payload: {id, status}} as const
 }
+export const ClearTodolistsAC = () => {
+    return {type: 'CLEAR-TODOLIST'} as const
+}
 
 
 export const SetTodolistsTC = () => {
-    return (dispatch: Dispatch) => {
+    return (dispatch: Dispatch | any) => {
         dispatch(PreloaderAC('loading'))
         todolistsAPI.getTodolists()
             .then((res) => {
                     dispatch(SetTodolistsAC(res.data))
                     dispatch(PreloaderAC('succeed'))
+                    return res
                 }
-            )
+            ).then(res => {
+            res.data.forEach(tl => dispatch(SetTasksTC(tl.id)))
+        })
             .catch((reason) => {
                 NetworkErrorHandler(reason, dispatch)
             })
@@ -131,7 +145,7 @@ export const AddTodolistsTC = (title: string) => {
 export const ChangeTodolistTitleTC = (id: string, title: string) => {
     return (dispatch: Dispatch) => {
         dispatch(PreloaderAC('loading'))
-        dispatch(SetStatusAC(id,'loading'))
+        dispatch(SetStatusAC(id, 'loading'))
         todolistsAPI.updateTodolist(id, title)
             .then((res) => {
                 if (res.data.resultCode === 0) {
@@ -140,7 +154,7 @@ export const ChangeTodolistTitleTC = (id: string, title: string) => {
                 } else {
                     ServerErrorHandler<string>(res.data.messages[0], dispatch)
                 }
-                dispatch(SetStatusAC(id,'idle'))
+                dispatch(SetStatusAC(id, 'idle'))
             }).catch(
             (reason) => {
                 NetworkErrorHandler(reason, dispatch)

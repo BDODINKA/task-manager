@@ -20,9 +20,20 @@ type ResponseType<D = {}> = {
     fieldsErrors: Array<string>
     data: D
 }
+type AuthMe = {
+    email: string
+    id: number
+    login: string
+}
 
 export const AuthAPI = {
-    auth(data: LoginParamsType) {
+    login(data: LoginParamsType) {
         return instance.post<LoginParamsType,AxiosResponse<ResponseType<{userId:number}>>>('/auth/login', data);
+    },
+    authMe(){
+        return instance.get<ResponseType<AuthMe>>('/auth/me')
+    },
+    logout(){
+        return instance.delete<ResponseType>('auth/login')
     }
 }

@@ -38,7 +38,7 @@ const slice = createSlice({
 
 export const appReducer = slice.reducer
 
-export const {PreloaderAC,ErrorAC,InitializeAC} =slice.actions
+export const {PreloaderAC,ErrorAC,InitializeAC} = slice.actions
 
 
 export const InitializeAppTC = () => (dispatch: Dispatch) => {

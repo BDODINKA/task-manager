@@ -12,6 +12,7 @@ const initialState: Array<TodolistDomainType> = [
 ]
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
+
 export type TodolistDomainType = TodolistType & {
     filter: FilterValuesType
     entityStatus: LoadType
@@ -50,7 +51,7 @@ const slice=createSlice({
             return state
         },
         SetTodolistsAC:(state:Array<TodolistDomainType>, action:PayloadAction<{todolists: TodolistType[]}>) => {
-            state = action.payload.todolists.map(tl => ({...tl, filter: 'all', entityStatus: "succeed"}))
+            return state = action.payload.todolists.map(tl => ({...tl, filter: 'all', entityStatus: "succeed"}))
         },
         SetStatusAC:(state:Array<TodolistDomainType>, action:PayloadAction<{id: string, entityStatus: LoadType}>) => {
             const todolist = state.find(tl => tl.id === action.payload.id);
@@ -60,7 +61,7 @@ const slice=createSlice({
         },
         ClearTodolistsAC:(state:Array<TodolistDomainType>, action:PayloadAction<{ value:null }>) => {
             if(action.payload.value){
-                state=[]
+                return state=[]
             }
         },
     }

@@ -131,14 +131,14 @@ export const SetTaskStatusAC = (todolistId:string,id: string, status: LoadType) 
 
 export const SetTasksTC = (TodolistID: string) => {
     return (dispatch: Dispatch) => {
-        dispatch(PreloaderAC('loading'))
+        dispatch(PreloaderAC({status:'loading'}))
         todolistsAPI.getTasks(TodolistID)
             .then((res) => {
                 if (res.data.error) {
                     ServerErrorHandler<string>(res.data.error, dispatch)
                 } else {
                     dispatch(SetTasksAC(res.data.items, TodolistID))
-                    dispatch(PreloaderAC('succeed'))
+                    dispatch(PreloaderAC({status:'succeed'}))
                 }
             })
             .catch((reason) => {
@@ -151,12 +151,12 @@ export const SetTasksTC = (TodolistID: string) => {
 
 export const AddTaskTC = (title: string, TodolistID: string) => {
     return (dispatch: Dispatch) => {
-        dispatch(PreloaderAC('loading'))
+        dispatch(PreloaderAC({status:'loading'}))
         todolistsAPI.createTask(TodolistID, title)
             .then((res) => {
                 if (res.data.resultCode === 0) {
                     dispatch(addTaskAC(res.data.data.item))
-                    dispatch(PreloaderAC('succeed'))
+                    dispatch(PreloaderAC({status:'succeed'}))
                 } else {
                     ServerErrorHandler<string>(res.data.messages[0], dispatch)
                 }
@@ -170,13 +170,13 @@ export const AddTaskTC = (title: string, TodolistID: string) => {
 }
 export const DeleteTaskTC = (todolistId: string, taskId: string) => {
     return (dispatch: Dispatch) => {
-        dispatch(PreloaderAC('loading'))
+        dispatch(PreloaderAC({status:'loading'}))
         dispatch(SetTaskStatusAC(todolistId,taskId,'loading'))
         todolistsAPI.deleteTask(todolistId, taskId)
             .then((res) => {
                 if (res.data.resultCode === 0) {
                     dispatch(removeTaskAC(todolistId, taskId))
-                    dispatch(PreloaderAC('succeed'))
+                    dispatch(PreloaderAC({status:'succeed'}))
                 } else {
                     ServerErrorHandler<string>(res.data.messages[0],dispatch)
                 }
@@ -198,7 +198,7 @@ export type UpdateTaskType = {
 
 export const UpdateTaskTC = (id: string, todolistId: string, value: UpdateTaskType) => {
     return (dispatch: Dispatch, getState: () => AppRootStateType) => {
-        dispatch(PreloaderAC('loading'))
+        dispatch(PreloaderAC({status:'loading'}))
         dispatch(SetTaskStatusAC(todolistId,id,'loading'))
         const task = getState().tasks[todolistId].find(t => t.id === id)
         if (task) {
@@ -210,7 +210,7 @@ export const UpdateTaskTC = (id: string, todolistId: string, value: UpdateTaskTy
                 .then((res) => {
                     if (res.data.resultCode === 0) {
                         dispatch(changeTaskAC(res.data.data.item))
-                        dispatch(PreloaderAC('idle'))
+                        dispatch(PreloaderAC({status:'idle'}))
                     } else {
                         ServerErrorHandler<string>(res.data.messages[0], dispatch)
                     }

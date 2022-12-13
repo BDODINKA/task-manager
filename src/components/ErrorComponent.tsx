@@ -22,7 +22,7 @@ export const ErrorComponent = (props: ResponseType) => {
         if (reason === 'clickaway') {
             return;
         }
-        dispatch(ErrorAC(null))
+        dispatch(ErrorAC({error:null}))
     };
 
     return (

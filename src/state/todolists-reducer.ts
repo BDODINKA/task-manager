@@ -57,16 +57,19 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
         case 'CHANGE-TODOLIST-TITLE': {
             const todolist = state.find(tl => tl.id === action.id);
             if (todolist) {
-                todolist.title = action.title;
+                return  state.map((tl)=>tl.id === action.id ? {...tl,title:action.title}:tl)
             }
-            return [...state]
+            return state
         }
         case 'CHANGE-TODOLIST-FILTER': {
             const todolist = state.find(tl => tl.id === action.id);
             if (todolist) {
-                todolist.filter = action.filter;
+                return  state.map((tl)=>tl.id === action.id ? {...tl,filter:action.filter}:tl)
             }
-            return [...state]
+            else {
+                return state
+            }
+
         }
         case "SET-TODOLISTS": {
             return action.todolists.map(tl => ({...tl, filter: 'all', entityStatus: "succeed"}))
@@ -94,8 +97,8 @@ export const addTodolistAC = (title: string, todolistID: string) => {
 export const changeTodolistTitleAC = (id: string, title: string) => {
     return {type: 'CHANGE-TODOLIST-TITLE', id, title} as const
 }
-export const changeTodolistFilterAC = (id: string, filter: FilterValuesType): ChangeTodolistFilterActionType => {
-    return {type: 'CHANGE-TODOLIST-FILTER', id: id, filter: filter}
+export const changeTodolistFilterAC = (id: string, filter: FilterValuesType) => {
+    return {type: 'CHANGE-TODOLIST-FILTER', id: id, filter: filter} as const
 }
 export const SetTodolistsAC = (todolists: TodolistType[]) => {
     return {type: 'SET-TODOLISTS', todolists: todolists} as const
@@ -110,11 +113,11 @@ export const ClearTodolistsAC = () => {
 
 export const SetTodolistsTC = () => {
     return (dispatch: Dispatch | any) => {
-        dispatch(PreloaderAC('loading'))
+        dispatch(PreloaderAC({status:'loading'}))
         todolistsAPI.getTodolists()
             .then((res) => {
                     dispatch(SetTodolistsAC(res.data))
-                    dispatch(PreloaderAC('succeed'))
+                    dispatch(PreloaderAC({status:'succeed'}))
                     return res
                 }
             ).then(res => {
@@ -127,12 +130,12 @@ export const SetTodolistsTC = () => {
 }
 export const AddTodolistsTC = (title: string) => {
     return (dispatch: Dispatch) => {
-        dispatch(PreloaderAC('loading'))
+        dispatch(PreloaderAC({status:'loading'}))
         todolistsAPI.createTodolist(title)
             .then((res) => {
                 if (res.data.resultCode === 0) {
                     dispatch(addTodolistAC(res.data.data.item.title, res.data.data.item.id))
-                    dispatch(PreloaderAC('succeed'))
+                    dispatch(PreloaderAC({status:'succeed'}))
                 } else {
                     ServerErrorHandler<string>(res.data.messages[0], dispatch)
                 }
@@ -144,13 +147,13 @@ export const AddTodolistsTC = (title: string) => {
 }
 export const ChangeTodolistTitleTC = (id: string, title: string) => {
     return (dispatch: Dispatch) => {
-        dispatch(PreloaderAC('loading'))
+        dispatch(PreloaderAC({status:'loading'}))
         dispatch(SetStatusAC(id, 'loading'))
         todolistsAPI.updateTodolist(id, title)
             .then((res) => {
                 if (res.data.resultCode === 0) {
                     dispatch(changeTodolistTitleAC(id, title))
-                    dispatch(PreloaderAC('idle'))
+                    dispatch(PreloaderAC({status:'idle'}))
                 } else {
                     ServerErrorHandler<string>(res.data.messages[0], dispatch)
                 }
@@ -163,13 +166,13 @@ export const ChangeTodolistTitleTC = (id: string, title: string) => {
 }
 export const DeleteTodolistTC = (id: string) => {
     return (dispatch: Dispatch) => {
-        dispatch(PreloaderAC('loading'))
+        dispatch(PreloaderAC({status:'loading'}))
         dispatch(SetStatusAC(id, "loading"))
         todolistsAPI.deleteTodolist(id)
             .then((res) => {
                 if (res.data.resultCode === 0) {
                     dispatch(removeTodolistAC(id))
-                    dispatch(PreloaderAC('succeed'))
+                    dispatch(PreloaderAC({status:'succeed'}))
                 } else {
                     ServerErrorHandler<string>(res.data.messages[0], dispatch)
                 }

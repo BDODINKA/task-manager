@@ -3,49 +3,42 @@ import {AuthAPI, LoginParamsType} from "../api/auth-api";
 import {PreloaderAC} from "./app-reducer";
 import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
 import {ClearTodolistsAC} from "./todolists-reducer";
+import {createSlice, Draft, PayloadAction} from "@reduxjs/toolkit";
 
 export type AuthStateType = typeof initialState
-type AllActions = ReturnType<typeof LoginAC> | ReturnType<typeof LogoutAC>
 
 const initialState = {
     isLogin: false
 }
 
 
-export const AuthReducer = (state: AuthStateType = initialState, action: AllActions) => {
-    switch (action.type) {
-        case "Login": {
-            return action.payload && {...state, isLogin: true}
-        }
-        case "Log-Out": {
-            return action.payload && {...state, isLogin: false}
-        }
-        default: {
-            return state
+
+const slice=createSlice({
+    name:"AUTH",
+    initialState,
+    reducers:{
+        LoginAC:(state:Draft<AuthStateType>, action:PayloadAction<{ userID: number }>)=>{
+            if(action.payload.userID){
+                state.isLogin= true
+            }
+        },
+        LogoutAC:(state, action:PayloadAction<{ userID: number }>)=>{
+            if(action.payload.userID){
+                state.isLogin= false
+            }
         }
     }
-};
-
-export const LoginAC = (userID: number) => {
-    return {
-        type: "Login",
-        payload: userID
-    } as const
-}
-export const LogoutAC = (userID: number) => {
-    return {
-        type: "Log-Out",
-        payload: userID
-    } as const
-}
+})
+export const authReducer=slice.reducer
+export const {LoginAC,LogoutAC} = slice.actions
 
 export const LoginTC = (values: LoginParamsType) => (dispatch: Dispatch) => {
     return AuthAPI.login(values)
         .then(res => {
-            dispatch(PreloaderAC('loading'))
+            dispatch(PreloaderAC({status:'loading'}))
             if (res.data.resultCode === 0) {
-                dispatch(LoginAC(res.data.data.userId))
-                dispatch(PreloaderAC('succeed'))
+                dispatch(LoginAC({userID:res.data.data.userId}))
+                dispatch(PreloaderAC({status:'succeed'}))
             } else {
                 ServerErrorHandler<string>(res.data.messages[0], dispatch)
             }
@@ -56,10 +49,10 @@ export const LoginTC = (values: LoginParamsType) => (dispatch: Dispatch) => {
 export const LogoutTC = () => (dispatch: Dispatch) => {
     return AuthAPI.logout()
         .then(res => {
-            dispatch(PreloaderAC('loading'))
+            dispatch(PreloaderAC({status:'loading'}))
             if (res.data.resultCode === 0) {
-                dispatch(LogoutAC(res.data.resultCode))
-                dispatch(PreloaderAC('succeed'))
+                dispatch(LogoutAC({userID:res.data.resultCode}))
+                dispatch(PreloaderAC({status:'succeed'}))
                 dispatch(ClearTodolistsAC())
             } else {
                 ServerErrorHandler<string>(res.data.messages[0], dispatch)

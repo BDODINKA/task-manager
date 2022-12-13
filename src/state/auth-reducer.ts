@@ -53,7 +53,7 @@ export const LogoutTC = () => (dispatch: Dispatch) => {
             if (res.data.resultCode === 0) {
                 dispatch(LogoutAC({userID:res.data.resultCode}))
                 dispatch(PreloaderAC({status:'succeed'}))
-                dispatch(ClearTodolistsAC())
+                dispatch(ClearTodolistsAC({value:null}))
             } else {
                 ServerErrorHandler<string>(res.data.messages[0], dispatch)
             }

@@ -15,7 +15,6 @@ import {
 import {AddTaskTC, DeleteTaskTC, UpdateTaskTC, UpdateTaskType} from "../state/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
-import {AuthStateType} from "../state/auth-reducer";
 import {TaskType} from "../api/todolists-api";
 import { Navigate } from 'react-router-dom';
 
@@ -25,15 +24,15 @@ export type TasksStateType = {
 
 const Todolists = () => {
 
-    const isLogin = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
+    const isLogin = useSelector<AppRootStateType>(state => state.auth.isLogin)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (!isLogin.isLogin){
+        if (!isLogin){
             return
         }
         dispatch(SetTodolistsTC())
-    }, [dispatch,isLogin.isLogin])
+    }, [dispatch,isLogin])
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
@@ -68,10 +67,9 @@ const Todolists = () => {
         dispatch(AddTodolistsTC(title));
     }, [dispatch]);
 
-    if (!isLogin.isLogin){
+    if (!isLogin){
         return <Navigate to={'/Login'}/>
     }
-    console.log(todolists)
     return (
             <Container fixed>
                 <Grid container style={{padding: '20px'}}>

@@ -9,11 +9,12 @@ import LinearProgress from "@mui/material/LinearProgress";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../state/store";
 import {LoadStateType} from "../state/app-reducer";
-import {AuthStateType, LogoutTC} from "../state/auth-reducer";
+import {LogoutTC} from "../state/auth-reducer";
+
 
 export const Header = () => {
     const Load = useSelector<AppRootStateType, LoadStateType>(state => state.app)
-    const isLogin = useSelector<AppRootStateType, AuthStateType>(state => state.auth)
+    const isLogin = useSelector<AppRootStateType>(state => state.auth.isLogin)
     const dispatch=useDispatch()
 
     const LogoutHandler = () => {
@@ -29,7 +30,7 @@ export const Header = () => {
                 <Typography variant="h6">
                     News
                 </Typography>
-                {isLogin.isLogin  &&  <Button color="inherit" onClick={LogoutHandler}>LogOut</Button>}
+                {isLogin  &&  <Button color="inherit" onClick={LogoutHandler}>LogOut</Button>}
             </Toolbar>
             {Load.loading === 'loading' && <LinearProgress/>}
         </AppBar>

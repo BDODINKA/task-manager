@@ -1,7 +1,8 @@
-import {AuthAPI} from "../api/auth-api";
-import {LoginAC} from "./auth-reducer";
-import {ServerErrorHandler} from "../utils/ErrorHandlers";
+import {AuthAPI, LoginParamsType} from "../api/auth-api";
+import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AxiosError} from "axios";
+import {LoginTC} from "./auth-reducer";
 
 export type LoadType = 'idle' | "succeed" | "failed" | "loading"
 
@@ -17,14 +18,14 @@ export const InitializeAppTC = createAsyncThunk('APP/INITIALIZE-APP', async (arg
     const res = await AuthAPI.authMe()
     try {
         if (res.data.resultCode === 0) {
-            dispatch(LoginAC({userID: res.data.data.id}))
+            dispatch(LoginTC.fulfilled({userID: res.data.data.id},'',{} as LoginParamsType))
             return;
         } else {
             ServerErrorHandler<string>(res.data.messages[0], dispatch)
             return rejectWithValue(res.data.messages[0])
         }
     } catch (reason) {
-        // NetworkErrorHandler(reason, dispatch)
+        NetworkErrorHandler(reason as AxiosError, dispatch)
         return rejectWithValue(reason)
     }
 })
@@ -41,6 +42,7 @@ const slice = createSlice({
         PreloaderAC: (state, action: PayloadAction<{ status: LoadType }>) => {
             state.loading = action.payload.status
         },
+
         ErrorAC: (state, action: PayloadAction<{ error: Error }>) => {
             state.loading = 'failed'
             state.ErrorMessage = action.payload.error

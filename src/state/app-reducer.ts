@@ -1,8 +1,8 @@
-import {AuthAPI, LoginParamsType} from "../api/auth-api";
+import {AuthAPI} from "../api/auth-api";
 import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
-import {LoginTC} from "./auth-reducer";
+import {IsLoggedIn} from "./auth-reducer";
 
 export type LoadType = 'idle' | "succeed" | "failed" | "loading"
 
@@ -18,7 +18,7 @@ export const InitializeAppTC = createAsyncThunk('APP/INITIALIZE-APP', async (arg
     const res = await AuthAPI.authMe()
     try {
         if (res.data.resultCode === 0) {
-            dispatch(LoginTC.fulfilled({userID: res.data.data.id},'',{} as LoginParamsType))
+            dispatch(IsLoggedIn({userID: res.data.data.id}))
             return;
         } else {
             ServerErrorHandler<string>(res.data.messages[0], dispatch)

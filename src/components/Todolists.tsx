@@ -38,16 +38,16 @@ const Todolists = () => {
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
 
 
-    const removeTask = useCallback(function (id: string, todolistId: string) {
-        dispatch(DeleteTaskTC(todolistId, id));
+    const removeTask = useCallback(function (taskId: string, todolistId: string) {
+        dispatch(DeleteTaskTC({todolistId, taskId}));
     }, [dispatch]);
 
-    const addTask = useCallback(function (title: string, todolistId: string) {
-        dispatch(AddTaskTC(title, todolistId));
+    const addTask = useCallback(function (title: string, TodolistID: string) {
+        dispatch(AddTaskTC({title, TodolistID}));
     }, [dispatch]);
 
     const changeTask = useCallback(function (id: string, todolistId: string, value: UpdateTaskType) {
-        dispatch(UpdateTaskTC(id, todolistId, value));
+        dispatch(UpdateTaskTC({id, todolistId, value}));
     }, [dispatch]);
 
     const changeFilter = useCallback(function (value: FilterValuesType, todolistId: string) {

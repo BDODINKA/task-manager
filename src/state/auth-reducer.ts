@@ -2,7 +2,7 @@ import {AuthAPI, LoginParamsType} from "../api/auth-api";
 import {PreloaderAC} from "./app-reducer";
 import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
 import {ClearTodolistsAC} from "./todolists-reducer";
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
 
@@ -46,7 +46,13 @@ const slice = createSlice({
     initialState: {
         isLogin: false
     },
-    reducers:{},
+    reducers: {
+        IsLoggedIn: (state, action: PayloadAction<{ userID: number }>) => {
+            if (action.payload.userID) {
+                state.isLogin = true
+            }
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(LoginTC.fulfilled, (state) => {
             state.isLogin = true
@@ -56,6 +62,9 @@ const slice = createSlice({
         })
     }
 })
+
+export const {IsLoggedIn} = slice.actions
+
 export const authReducer = slice.reducer
 
 

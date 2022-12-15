@@ -1,63 +1,70 @@
-import {Dispatch} from "redux";
 import {AuthAPI, LoginParamsType} from "../api/auth-api";
 import {PreloaderAC} from "./app-reducer";
 import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AxiosError} from "axios";
 import {ClearTodolistsAC} from "./todolists-reducer";
-import {createSlice, Draft, PayloadAction} from "@reduxjs/toolkit";
-
-export type AuthStateType = typeof initialState
-
-const initialState = {
-    isLogin: false
-}
 
 
-
-const slice=createSlice({
-    name:"AUTH",
-    initialState,
-    reducers:{
-        LoginAC:(state:Draft<AuthStateType>, action:PayloadAction<{ userID: number }>)=>{
-            if(action.payload.userID){
-                state.isLogin= true
-            }
-        },
-        LogoutAC:(state, action:PayloadAction<{ userID: number }>)=>{
-            if(action.payload.userID){
-                state.isLogin= false
-            }
+export const LoginTC = createAsyncThunk('AUTH/LOGIN', async (values: LoginParamsType, {dispatch, rejectWithValue}) => {
+    const res = await AuthAPI.login(values)
+    try {
+        dispatch(PreloaderAC({status: 'loading'}))
+        if (res.data.resultCode === 0) {
+            dispatch(PreloaderAC({status: 'succeed'}))
+            return {userID: res.data.data.userId}
+        } else {
+            ServerErrorHandler<string>(res.data.messages[0], dispatch)
+            return rejectWithValue(res.data.messages[0])
         }
+    } catch (reason) {
+        NetworkErrorHandler(reason as AxiosError, dispatch)
+        return rejectWithValue(reason)
     }
 })
-export const authReducer=slice.reducer
-export const {LoginAC,LogoutAC} = slice.actions
+export const LogoutTC = createAsyncThunk('AUTH/LOGOUT', async (arg, {dispatch, rejectWithValue}) => {
+    const res = await AuthAPI.logout()
+    try {
+        dispatch(PreloaderAC({status: 'loading'}))
+        if (res.data.resultCode === 0) {
+            dispatch(PreloaderAC({status: 'succeed'}))
+            dispatch(ClearTodolistsAC({value: null}))
+            return {userID: res.data.resultCode}
+        } else {
+            ServerErrorHandler<string>(res.data.messages[0], dispatch)
+            return rejectWithValue(res.data.messages[0])
+        }
+    } catch (reason) {
+        NetworkErrorHandler(reason as AxiosError, dispatch)
+        return rejectWithValue(reason)
+    }
+})
 
-export const LoginTC = (values: LoginParamsType) => (dispatch: Dispatch) => {
-    return AuthAPI.login(values)
-        .then(res => {
-            dispatch(PreloaderAC({status:'loading'}))
-            if (res.data.resultCode === 0) {
-                dispatch(LoginAC({userID:res.data.data.userId}))
-                dispatch(PreloaderAC({status:'succeed'}))
-            } else {
-                ServerErrorHandler<string>(res.data.messages[0], dispatch)
+
+const slice = createSlice({
+    name: "AUTH",
+    initialState: {
+        isLogin: false
+    },
+    reducers: {
+        IsLoggedIn: (state, action: PayloadAction<{ userID: number }>) => {
+            if (action.payload.userID) {
+                state.isLogin = true
             }
-        }).catch(reason => {
-            NetworkErrorHandler(reason, dispatch)
+        }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(LoginTC.fulfilled, (state) => {
+            state.isLogin = true
         })
-}
-export const LogoutTC = () => (dispatch: Dispatch) => {
-    return AuthAPI.logout()
-        .then(res => {
-            dispatch(PreloaderAC({status:'loading'}))
-            if (res.data.resultCode === 0) {
-                dispatch(LogoutAC({userID:res.data.resultCode}))
-                dispatch(PreloaderAC({status:'succeed'}))
-                dispatch(ClearTodolistsAC({value:null}))
-            } else {
-                ServerErrorHandler<string>(res.data.messages[0], dispatch)
-            }
-        }).catch(reason => {
-            NetworkErrorHandler(reason, dispatch)
+        builder.addCase(LogoutTC.fulfilled, (state) => {
+            state.isLogin = false
         })
-}
+    }
+})
+
+export const {IsLoggedIn} = slice.actions
+
+export const authReducer = slice.reducer
+
+

@@ -60,7 +60,7 @@ const Todolists = () => {
     }, [dispatch]);
 
     const changeTodolistTitle = useCallback(function (id: string, title: string) {
-        dispatch(ChangeTodolistTitleTC(id, title));
+        dispatch(ChangeTodolistTitleTC({id, title}));
     }, [dispatch]);
 
     const addTodolist = useCallback((title: string) => {

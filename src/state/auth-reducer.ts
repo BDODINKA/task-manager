@@ -1,9 +1,9 @@
 import {AuthAPI, LoginParamsType} from "../api/auth-api";
 import {PreloaderAC} from "./app-reducer";
 import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
-import {ClearTodolistsAC} from "./todolists-reducer";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
+import {ClearTodolistsAC} from "./todolists-reducer";
 
 
 export const LoginTC = createAsyncThunk('AUTH/LOGIN', async (values: LoginParamsType, {dispatch, rejectWithValue}) => {

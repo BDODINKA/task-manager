@@ -6,17 +6,17 @@ import {Todolist} from "./Todolist";
 import Container from "@mui/material/Container";
 import {
     AddTodolistsTC,
-    changeTodolistFilterAC, ChangeTodolistTitleTC,
+    changeTodolistFilterAC,
+    ChangeTodolistTitleTC,
     DeleteTodolistTC,
     FilterValuesType,
-    SetTodolistsTC,
-    TodolistDomainType
+    SetTodolistsTC
 } from "./todolists-reducer";
 import {AddTaskTC, DeleteTaskTC, UpdateTaskTC, UpdateTaskType} from "./Task/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../app/store";
 import {TaskType} from "../../api/todolists-api";
-import { Navigate } from 'react-router-dom';
+import {Navigate} from 'react-router-dom';
+import {selectorIsLogin, selectorTasks, selectorTodolists} from "../../common/selectors/selectorsAll";
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
@@ -24,7 +24,10 @@ export type TasksStateType = {
 
 const Todolists = () => {
 
-    const isLogin = useSelector<AppRootStateType>(state => state.auth.isLogin)
+    const isLogin = useSelector(selectorIsLogin)
+    const todolists = useSelector(selectorTodolists)
+    const tasks = useSelector(selectorTasks)
+
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -34,8 +37,7 @@ const Todolists = () => {
         dispatch(SetTodolistsTC())
     }, [dispatch,isLogin])
 
-    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
-    const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+
 
 
     const removeTask = useCallback(function (taskId: string, todolistId: string) {

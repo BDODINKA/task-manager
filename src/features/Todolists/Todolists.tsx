@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react';
 import Grid from "@mui/material/Grid";
-import {AddItemForm} from "./AddItemForm";
+import {AddItemForm} from "../../common/components/AddItemForm";
 import Paper from "@mui/material/Paper";
 import {Todolist} from "./Todolist";
 import Container from "@mui/material/Container";
@@ -11,11 +11,11 @@ import {
     FilterValuesType,
     SetTodolistsTC,
     TodolistDomainType
-} from "../state/todolists-reducer";
-import {AddTaskTC, DeleteTaskTC, UpdateTaskTC, UpdateTaskType} from "../state/tasks-reducer";
+} from "./todolists-reducer";
+import {AddTaskTC, DeleteTaskTC, UpdateTaskTC, UpdateTaskType} from "./Task/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../state/store";
-import {TaskType} from "../api/todolists-api";
+import {AppRootStateType} from "../../app/store";
+import {TaskType} from "../../api/todolists-api";
 import { Navigate } from 'react-router-dom';
 
 export type TasksStateType = {
@@ -68,7 +68,7 @@ const Todolists = () => {
     }, [dispatch]);
 
     if (!isLogin){
-        return <Navigate to={'/Login'}/>
+        return <Navigate to={'/Auth'}/>
     }
     return (
             <Container fixed>

@@ -1,11 +1,11 @@
-import {TaskPriorities, TaskStatuses, todolistsAPI} from '../api/todolists-api'
-import {AppRootStateType} from "./store";
-import {LoadType, PreloaderAC} from "./app-reducer";
-import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
-import {TasksStateType} from "../components/Todolists";
+import {TaskPriorities, TaskStatuses, todolistsAPI} from '../../../api/todolists-api'
+import {AppRootStateType} from "../../../app/store";
+import {LoadType, PreloaderAC} from "../../../app/app-reducer";
+import {NetworkErrorHandler, ServerErrorHandler} from "../../../utils/ErrorHandlers";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {AddTodolistsTC, DeleteTodolistTC, SetTodolistsTC} from "./todolists-reducer";
+import {AddTodolistsTC, DeleteTodolistTC, SetTodolistsTC} from "../todolists-reducer";
 import {AxiosError} from "axios";
+import {TasksStateType} from "../Todolists";
 
 export type UpdateTaskType = {
     title?: string

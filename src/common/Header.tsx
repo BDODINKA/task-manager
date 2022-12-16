@@ -7,9 +7,9 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../state/store";
-import {LoadStateType} from "../state/app-reducer";
-import {LogoutTC} from "../state/auth-reducer";
+import {AppRootStateType} from "../app/store";
+import {LoadStateType} from "../app/app-reducer";
+import {LogoutTC} from "../features/Auth/auth-reducer";
 
 
 export const Header = () => {

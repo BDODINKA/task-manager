@@ -2,7 +2,7 @@ import {AuthAPI} from "../api/auth-api";
 import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
-import {IsLoggedIn} from "./auth-reducer";
+import {IsLoggedIn} from "../features/Auth/auth-reducer";
 
 export type LoadType = 'idle' | "succeed" | "failed" | "loading"
 

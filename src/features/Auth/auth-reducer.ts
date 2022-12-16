@@ -1,9 +1,9 @@
-import {AuthAPI, LoginParamsType} from "../api/auth-api";
-import {PreloaderAC} from "./app-reducer";
-import {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
+import {AuthAPI, LoginParamsType} from "../../api/auth-api";
+import {PreloaderAC} from "../../app/app-reducer";
+import {NetworkErrorHandler, ServerErrorHandler} from "../../utils/ErrorHandlers";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
-import {ClearTodolistsAC} from "./todolists-reducer";
+import {ClearTodolistsAC} from "../Todolists/todolists-reducer";
 
 
 export const LoginTC = createAsyncThunk('AUTH/LOGIN', async (values: LoginParamsType, {dispatch, rejectWithValue}) => {
@@ -22,6 +22,7 @@ export const LoginTC = createAsyncThunk('AUTH/LOGIN', async (values: LoginParams
         return rejectWithValue(reason)
     }
 })
+
 export const LogoutTC = createAsyncThunk('AUTH/LOGOUT', async (arg, {dispatch, rejectWithValue}) => {
     const res = await AuthAPI.logout()
     try {

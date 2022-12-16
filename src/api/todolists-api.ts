@@ -1,5 +1,5 @@
 import axios, {AxiosResponse} from 'axios'
-import {LoadType} from "../state/app-reducer";
+import {LoadType} from "../app/app-reducer";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',

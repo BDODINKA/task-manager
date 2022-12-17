@@ -1,9 +1,15 @@
-import {todolistsAPI, TodolistType} from '../../api/todolists-api'
-import {LoadType, PreloaderAC} from "../../app/app-reducer";
-import {NetworkErrorHandler, ServerErrorHandler} from "../../utils/ErrorHandlers";
+
+import {
+    AllTodosActions,
+    LoadType,
+    NetworkErrorHandler,
+    PreloaderAC,
+    ServerErrorHandler,
+    todolistsAPI,
+    TodolistType
+} from "./index";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
-import {SetTasksTC} from "./Task/tasks-reducer";
 
 
 // const initialState: Array<TodolistDomainType> = [
@@ -18,13 +24,13 @@ export type TodolistDomainType = TodolistType & {
     entityStatus: LoadType
 }
 
-export const SetTodolistsTC = createAsyncThunk('TODOLISTS/SET-TODOLISTS', async (arg, {dispatch, rejectWithValue}) => {
+const SetTodolistsTC = createAsyncThunk('TODOLISTS/SET-TODOLISTS', async (arg, {dispatch, rejectWithValue}) => {
 
     dispatch(PreloaderAC({status: 'loading'}))
     const res = await todolistsAPI.getTodolists()
     try {
         dispatch(PreloaderAC({status: 'succeed'}))
-        res.data.forEach(tl => dispatch(SetTasksTC(tl.id)))
+        res.data.forEach(tl => dispatch(AllTodosActions.AsyncTaskActions.SetTasksTC(tl.id)))
         return {todolists: res.data}
     } catch (reason) {
         NetworkErrorHandler(reason as AxiosError, dispatch)
@@ -32,11 +38,12 @@ export const SetTodolistsTC = createAsyncThunk('TODOLISTS/SET-TODOLISTS', async 
     }
 })
 
-export const AddTodolistsTC = createAsyncThunk('TODOLISTS/ADD-TODOLISTS', async (title: string, {
+const AddTodolistsTC = createAsyncThunk('TODOLISTS/ADD-TODOLISTS', async (arg:{title: string}, {
     dispatch,
     rejectWithValue
 }) => {
     dispatch(PreloaderAC({status: 'loading'}))
+    const {title}=arg
     const res = await todolistsAPI.createTodolist(title)
     try {
         if (res.data.resultCode === 0) {
@@ -52,7 +59,7 @@ export const AddTodolistsTC = createAsyncThunk('TODOLISTS/ADD-TODOLISTS', async 
     }
 })
 
-export const ChangeTodolistTitleTC = createAsyncThunk('TODOLISTS/CHANGE-TODOLIST-TITLE', async (arg: { id: string, title: string }, {
+const ChangeTodolistTitleTC = createAsyncThunk('TODOLISTS/CHANGE-TODOLIST-TITLE', async (arg: { id: string, title: string }, {
     dispatch,
     rejectWithValue
 }) => {
@@ -77,7 +84,8 @@ export const ChangeTodolistTitleTC = createAsyncThunk('TODOLISTS/CHANGE-TODOLIST
     }
 })
 
-export const DeleteTodolistTC = createAsyncThunk('', async (id: string, {dispatch, rejectWithValue}) => {
+const DeleteTodolistTC = createAsyncThunk('', async (arg:{id: string}, {dispatch, rejectWithValue}) => {
+    const {id}=arg
     dispatch(PreloaderAC({status: 'loading'}))
     dispatch(SetStatusAC({id, entityStatus: "loading"}))
     const res = await todolistsAPI.deleteTodolist(id)
@@ -114,7 +122,9 @@ const slice = createSlice({
             }
         },
         ClearTodolistsAC: (state, action: PayloadAction<{ value: null }>) => {
-            return []
+            if (action.payload.value) {
+                state.push()
+            }
         },
     },
     extraReducers: (builder) => {
@@ -147,11 +157,12 @@ const slice = createSlice({
 
 export const todolistsReducer = slice.reducer
 
-export const {
-    changeTodolistFilterAC,
-    SetStatusAC,
-    ClearTodolistsAC,
-} = slice.actions
+export const AsyncTodoActions= {DeleteTodolistTC,SetTodolistsTC,AddTodolistsTC,ChangeTodolistTitleTC};
+
+export const  TodoActions = slice.actions
+
+const {SetStatusAC}=TodoActions
+
 
 
 

@@ -15,4 +15,3 @@ export {AuthAPI} from "../api/auth-api";
 export {tasksReducer} from "../features/Todolists/Task/tasks-reducer";
 export {todolistsReducer} from "../features/Todolists/todolists-reducer";
 export {authReducer,IsLoggedIn} from "../features/Auth/auth-reducer"
-export {appReducer} from "./app-reducer";

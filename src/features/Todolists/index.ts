@@ -11,3 +11,4 @@ export {selectorIsLogin, selectorTasks, selectorTodolists} from "../../common/se
 export {AddTaskTC, DeleteTaskTC, UpdateTaskTC} from "./Task/tasks-reducer";
 export type { UpdateTaskType} from "./Task/tasks-reducer";
 export {useAppSelector} from "../../utils/hooks/useAppSelector";
+export {useAppDispatch} from "../../utils/hooks/useAppDispatch";

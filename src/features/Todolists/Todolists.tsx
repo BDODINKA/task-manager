@@ -7,7 +7,10 @@ import {
     selectorTasks,
     selectorTodolists,
     UpdateTaskTC,
-    UpdateTaskType, useAppSelector
+    UpdateTaskType,
+    useAppSelector,
+    TaskType,
+    useAppDispatch,
 } from "./index";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -21,9 +24,8 @@ import {
     FilterValuesType,
     SetTodolistsTC
 } from "./todolists-reducer";
-import {useDispatch} from "react-redux";
-import {TaskType} from "../../api/todolists-api";
 import {Navigate} from 'react-router-dom';
+
 
 
 
@@ -36,7 +38,7 @@ export const Todolists = () => {
     const todolists = useAppSelector(selectorTodolists)
     const tasks = useAppSelector(selectorTasks)
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         if (!isLogin) {

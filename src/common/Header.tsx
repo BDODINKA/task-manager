@@ -6,16 +6,16 @@ import Menu from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../app/store";
-import {LoadStateType} from "../app/app-reducer";
 import {LogoutTC} from "../features/Auth/auth-reducer";
+import {useAppDispatch} from "../utils/hooks/useAppDispatch";
+import {useAppSelector} from "../utils/hooks/useAppSelector";
+import {selectorIsLoading, selectorIsLogin} from "./selectors/selectorsAll";
 
 
 export const Header = () => {
-    const Load = useSelector<AppRootStateType, LoadStateType>(state => state.app)
-    const isLogin = useSelector<AppRootStateType>(state => state.auth.isLogin)
-    const dispatch=useDispatch()
+    const loading = useAppSelector(selectorIsLoading)
+    const isLogin = useAppSelector(selectorIsLogin)
+    const dispatch = useAppDispatch()
 
     const LogoutHandler = () => {
         dispatch(LogoutTC())
@@ -30,9 +30,9 @@ export const Header = () => {
                 <Typography variant="h6">
                     News
                 </Typography>
-                {isLogin  &&  <Button color="inherit" onClick={LogoutHandler}>LogOut</Button>}
+                {isLogin && <Button color="inherit" onClick={LogoutHandler}>LogOut</Button>}
             </Toolbar>
-            {Load.loading === 'loading' && <LinearProgress/>}
+            {loading === 'loading' && <LinearProgress/>}
         </AppBar>
     );
 };

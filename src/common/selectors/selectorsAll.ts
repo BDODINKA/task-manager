@@ -10,11 +10,13 @@ const selectorIsInitialize = (state:AppRootStateType)=>state.app.isInitialize
 
 const selectorErrorMessage = (state:AppRootStateType)=>state.app.ErrorMessage
 
+const selectorIsLoading = (state:AppRootStateType)=>state.app.loading
+
 export {
     selectorIsLogin,
     selectorTodolists,
     selectorTasks,
     selectorIsInitialize,
     selectorErrorMessage,
-
+    selectorIsLoading,
 }

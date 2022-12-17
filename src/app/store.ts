@@ -1,7 +1,8 @@
 import {combineReducers} from 'redux';
 import thunk from "redux-thunk";
 import {configureStore} from "@reduxjs/toolkit";
-import {tasksReducer,todolistsReducer,authReducer,appReducer} from "./index";
+import {tasksReducer,todolistsReducer,authReducer} from "./index";
+import {appReducer} from "./app-reducer";
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,

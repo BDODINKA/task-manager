@@ -53,7 +53,6 @@ export const SetTasksTC = createAsyncThunk('TASKS/SET-TASKS', async (TodolistID:
         NetworkErrorHandler(reason as AxiosError, dispatch)
         return rejectWithValue(reason)
     }
-
 })
 
 export const AddTaskTC = createAsyncThunk('TASKS/ADD-TASKS', async (arg: { title: string, TodolistID: string }, {

@@ -2,8 +2,10 @@ import React from 'react';
 import Stack from '@mui/material/Stack';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, {AlertProps} from '@mui/material/Alert';
-import {ErrorAC, LoadStateType} from "../../app/app-reducer";
-import {useDispatch} from "react-redux";
+import {ErrorAC} from "../../app/app-reducer";
+import {useAppDispatch} from "../../utils/hooks/useAppDispatch";
+import {useAppSelector} from "../../utils/hooks/useAppSelector";
+import {selectorErrorMessage} from "../selectors/selectorsAll";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props,
@@ -11,12 +13,11 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 ) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-type ResponseType = {
-    Load:LoadStateType
-}
 
-export const ErrorComponent = (props: ResponseType) => {
-    const dispatch = useDispatch()
+
+export const ErrorComponent = () => {
+    const dispatch = useAppDispatch()
+    const errorMessage = useAppSelector(selectorErrorMessage)
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
@@ -27,9 +28,9 @@ export const ErrorComponent = (props: ResponseType) => {
 
     return (
         <Stack spacing={2} sx={{width: '100%'}}>
-            <Snackbar open={!!props.Load.ErrorMessage} autoHideDuration={6000} onClose={handleClose}>
+            <Snackbar open={!!errorMessage} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error" sx={{width: '100%'}}>
-                    {props.Load.ErrorMessage}
+                    {errorMessage}
                 </Alert>
             </Snackbar>
             {/*<Alert severity="error">This is an error message!</Alert>*/}

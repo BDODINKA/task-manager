@@ -1,14 +1,13 @@
 import React, {useCallback} from 'react'
-import {AddItemForm} from '../../common/components/AddItemForm'
-import {EditableSpan} from '../../common/components/EditableSpan'
+
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-import {Delete} from '@mui/icons-material';
+import Delete from '@mui/icons-material/Delete';
 import {Task} from './Task/Task'
-import {TaskStatuses, TaskType} from '../../api/todolists-api'
-import {FilterValuesType} from './todolists-reducer'
-import {UpdateTaskType} from "./Task/tasks-reducer";
-import {LoadType} from "../../app/app-reducer";
+
+import {EditableSpan, TaskType, UpdateTaskType} from "./Task";
+import {AddItemForm, FilterValuesType, LoadType, TaskStatuses} from "./index";
+
 
 type PropsType = {
     id: string

@@ -1,6 +1,15 @@
 import React, {useCallback, useEffect} from 'react';
+import {
+    AddItemForm,
+    AddTaskTC,
+    DeleteTaskTC,
+    selectorIsLogin,
+    selectorTasks,
+    selectorTodolists,
+    UpdateTaskTC,
+    UpdateTaskType, useAppSelector
+} from "./index";
 import Grid from "@mui/material/Grid";
-import {AddItemForm} from "../../common/components/AddItemForm";
 import Paper from "@mui/material/Paper";
 import {Todolist} from "./Todolist";
 import Container from "@mui/material/Container";
@@ -12,32 +21,29 @@ import {
     FilterValuesType,
     SetTodolistsTC
 } from "./todolists-reducer";
-import {AddTaskTC, DeleteTaskTC, UpdateTaskTC, UpdateTaskType} from "./Task/tasks-reducer";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {TaskType} from "../../api/todolists-api";
 import {Navigate} from 'react-router-dom';
-import {selectorIsLogin, selectorTasks, selectorTodolists} from "../../common/selectors/selectorsAll";
+
+
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
-const Todolists = () => {
-
-    const isLogin = useSelector(selectorIsLogin)
-    const todolists = useSelector(selectorTodolists)
-    const tasks = useSelector(selectorTasks)
+export const Todolists = () => {
+    const isLogin = useAppSelector(selectorIsLogin)
+    const todolists = useAppSelector(selectorTodolists)
+    const tasks = useAppSelector(selectorTasks)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (!isLogin){
+        if (!isLogin) {
             return
         }
         dispatch(SetTodolistsTC())
-    }, [dispatch,isLogin])
-
-
+    }, [dispatch, isLogin])
 
 
     const removeTask = useCallback(function (taskId: string, todolistId: string) {
@@ -53,7 +59,7 @@ const Todolists = () => {
     }, [dispatch]);
 
     const changeFilter = useCallback(function (value: FilterValuesType, todolistId: string) {
-        const action = changeTodolistFilterAC({id:todolistId,filter: value});
+        const action = changeTodolistFilterAC({id: todolistId, filter: value});
         dispatch(action);
     }, [dispatch]);
 
@@ -69,41 +75,39 @@ const Todolists = () => {
         dispatch(AddTodolistsTC(title));
     }, [dispatch]);
 
-    if (!isLogin){
+    if (!isLogin) {
         return <Navigate to={'/Auth'}/>
     }
     return (
-            <Container fixed>
-                <Grid container style={{padding: '20px'}}>
-                    <AddItemForm addItem={addTodolist}/>
-                </Grid>
-                <Grid container spacing={3}>
-                    {
-                        todolists.map(tl => {
-                            let allTodolistTasks = tasks[tl.id];
-                            return <Grid item key={tl.id}>
-                                <Paper style={{padding: '10px'}}>
-                                    <Todolist
-                                        id={tl.id}
-                                        title={tl.title}
-                                        tasks={allTodolistTasks}
-                                        removeTask={removeTask}
-                                        changeFilter={changeFilter}
-                                        addTask={addTask}
-                                        entityStatus={tl.entityStatus}
-                                        filter={tl.filter}
-                                        removeTodolist={removeTodolist}
-                                        changeTask={changeTask}
-                                        changeTodolistTitle={changeTodolistTitle}
-                                    />
-                                </Paper>
-                            </Grid>
-                        })
-                    }
-                </Grid>
-            </Container >
+        <Container fixed>
+            <Grid container style={{padding: '20px'}}>
+                <AddItemForm addItem={addTodolist}/>
+            </Grid>
+            <Grid container spacing={3}>
+                {
+                    todolists.map(tl => {
+                        let allTodolistTasks = tasks[tl.id];
+                        return <Grid item key={tl.id}>
+                            <Paper style={{padding: '10px'}}>
+                                <Todolist
+                                    id={tl.id}
+                                    title={tl.title}
+                                    tasks={allTodolistTasks}
+                                    removeTask={removeTask}
+                                    changeFilter={changeFilter}
+                                    addTask={addTask}
+                                    entityStatus={tl.entityStatus}
+                                    filter={tl.filter}
+                                    removeTodolist={removeTodolist}
+                                    changeTask={changeTask}
+                                    changeTodolistTitle={changeTodolistTitle}
+                                />
+                            </Paper>
+                        </Grid>
+                    })
+                }
+            </Grid>
+        </Container>
 
     );
 };
-
-export default Todolists;

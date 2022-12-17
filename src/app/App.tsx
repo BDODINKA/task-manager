@@ -1,25 +1,23 @@
 import React, {useEffect} from 'react'
 import './App.css';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from './store';
-import {ErrorComponent} from "../common/components/ErrorComponent";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import Todolists from "../features/Todolists/Todolists";
-import {Auth} from "../features/Auth/Auth";
-import {InitializeAppTC, LoadStateType} from "./app-reducer";
+import {InitializeAppTC} from "./app-reducer";
 import {CircularProgress} from "@mui/material";
-import {Header} from "../common/Header";
+import {Auth, ErrorComponent, Header, selectorIsInitialize, Todolists, useAppDispatch, useAppSelector} from './index';
+
+
 
 
 function App() {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
+
     useEffect(() => {
         dispatch(InitializeAppTC())
     }, [dispatch])
 
-    const Load = useSelector<AppRootStateType, LoadStateType>(state => state.app)
+    const isInitialize = useAppSelector(selectorIsInitialize)
 
-    if (!Load.isInitialize) {
+    if (!isInitialize) {
         return <div
             style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
             <CircularProgress/>
@@ -36,7 +34,7 @@ function App() {
                     <Route path={'/'} element={<Todolists/>}/>
                 </Routes>
             </BrowserRouter>
-            <ErrorComponent Load={Load}/>
+            <ErrorComponent />
         </div>
     );
 }

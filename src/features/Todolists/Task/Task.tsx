@@ -1,11 +1,8 @@
 import React, {ChangeEvent, useCallback} from 'react'
-import {EditableSpan} from './EditableSpan'
-import {Delete} from '@mui/icons-material';
+import Delete from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import Checkbox from '@mui/material/Checkbox';
-import {TaskStatuses, TaskType} from '../api/todolists-api'
-import {UpdateTaskType} from "../state/tasks-reducer";
-import {LoadType} from "../state/app-reducer";
+import {EditableSpan, LoadType, TaskStatuses, TaskType, UpdateTaskType} from "./index";
 
 type TaskPropsType = {
     task: TaskType
@@ -14,6 +11,7 @@ type TaskPropsType = {
     changeTask: (id: string, todolistId: string, value: UpdateTaskType) => void
     entityStatus:LoadType
 }
+
 export const Task = React.memo((props: TaskPropsType) => {
     const {todolistId, task, removeTask, changeTask}: TaskPropsType = props
     const {id}: TaskType = task

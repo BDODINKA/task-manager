@@ -2,7 +2,7 @@ import {ActionCreatorsMapObject, bindActionCreators} from "redux";
 import {useMemo} from "react";
 import {useAppDispatch} from "./useAppDispatch";
 
-export const useActions = <T extends ActionCreatorsMapObject<T>>(actions: T) =>{
+export const useActionCreators = <T extends ActionCreatorsMapObject<T>>(actions: T) =>{
     const dispatch = useAppDispatch()
 
     const boundActions = useMemo(() => {

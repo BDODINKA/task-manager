@@ -11,7 +11,10 @@ export {AddItemForm} from '../../common/components/AddItemForm'
 export {EditableSpan} from '../../common/components/EditableSpan'
 
 export {selectorIsLogin, selectorTasks, selectorTodolists} from "../../common/selectors/selectorsAll";
+
 export type {UpdateTaskType} from "./Task/tasks-reducer";
+export type {TodolistDomainType} from "./todolists-reducer";
+
 export {useAppSelector} from "../../utils/hooks/useAppSelector";
 export {useAppDispatch} from "../../utils/hooks/useAppDispatch";
 export {useActionCreators} from "../../utils/hooks/useActionCreators";

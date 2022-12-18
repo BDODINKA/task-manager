@@ -7,5 +7,5 @@ export const useActionCreators = <T extends ActionCreatorsMapObject<any>>(action
 
     return useMemo(() => {
         return bindActionCreators(actions, dispatch)
-    }, [])
+    }, [actions,dispatch])
 }

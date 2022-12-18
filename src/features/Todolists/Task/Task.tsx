@@ -2,32 +2,35 @@ import React, {ChangeEvent, useCallback} from 'react'
 import Delete from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import Checkbox from '@mui/material/Checkbox';
-import {EditableSpan, LoadType, TaskStatuses, TaskType, UpdateTaskType} from "./index";
+import {AllTodosActions, EditableSpan, LoadType, TaskStatuses, TaskType} from "./index";
+import {useActionCreators} from "../../../utils/hooks/useActionCreators";
 
 type TaskPropsType = {
     task: TaskType
     todolistId: string
-    removeTask: (taskId: string, todolistId: string) => void
-    changeTask: (id: string, todolistId: string, value: UpdateTaskType) => void
     entityStatus:LoadType
 }
 
 export const Task = React.memo((props: TaskPropsType) => {
-    const {todolistId, task, removeTask, changeTask}: TaskPropsType = props
+    const {todolistId, task}: TaskPropsType = props
     const {id}: TaskType = task
+
+    const {DeleteTaskTC,UpdateTaskTC} =useActionCreators(AllTodosActions.AsyncTaskActions)
+
+
     const onClickHandler = useCallback(() => {
-        removeTask(id, todolistId)
-    }, [id, todolistId, removeTask]);
+        DeleteTaskTC({taskId:id,todolistId})
+    }, [id, todolistId, DeleteTaskTC]);
 
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         let newIsDoneValue = e.currentTarget.checked
         const status = newIsDoneValue ? TaskStatuses.Completed : TaskStatuses.New
-        changeTask(id, todolistId, {status})
-    }, [id, todolistId, changeTask]);
+        UpdateTaskTC({id,todolistId,value:{status}})
+    }, [id, todolistId, UpdateTaskTC]);
 
     const onTitleChangeHandler = useCallback((newValue: string) => {
-        changeTask(id, todolistId, {title: newValue})
-    }, [id, todolistId, changeTask]);
+        UpdateTaskTC({id,todolistId,value:{title:newValue}})
+    }, [id, todolistId, UpdateTaskTC]);
 
     return <div key={props.task.id} className={props.task.status === TaskStatuses.Completed ? 'is-done' : ''}>
         <Checkbox

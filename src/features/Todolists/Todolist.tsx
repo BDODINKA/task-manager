@@ -73,7 +73,6 @@ export const Todolist = React.memo(function (props: PropsType) {
                 tasksForTodolist.map(t =>
                     <Task
                         key={t.id} task={t} todolistId={id}
-                        entityStatus={t.entityStatus}
                     />)
             }
         </div>

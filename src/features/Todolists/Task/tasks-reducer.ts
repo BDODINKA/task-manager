@@ -3,9 +3,9 @@ import {AppRootStateType} from "../../../app/store";
 import {LoadType, PreloaderAC} from "../../../app/app-reducer";
 import {NetworkErrorHandler, ServerErrorHandler} from "../../../utils/ErrorHandlers";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {AddTodolistsTC, DeleteTodolistTC, SetTodolistsTC} from "../todolists-reducer";
 import {AxiosError} from "axios";
 import {TasksStateType} from "../Todolists";
+import {AsyncTodoActions} from "../todolists-reducer";
 
 export type UpdateTaskType = {
     title?: string
@@ -35,7 +35,7 @@ export type UpdateTaskType = {
 //     ]*/
 // }
 
-export const SetTasksTC = createAsyncThunk('TASKS/SET-TASKS', async (TodolistID: string, {
+const SetTasksTC = createAsyncThunk('TASKS/SET-TASKS', async (TodolistID: string, {
     dispatch,
     rejectWithValue
 }) => {
@@ -55,7 +55,7 @@ export const SetTasksTC = createAsyncThunk('TASKS/SET-TASKS', async (TodolistID:
     }
 })
 
-export const AddTaskTC = createAsyncThunk('TASKS/ADD-TASKS', async (arg: { title: string, TodolistID: string }, {
+const AddTaskTC = createAsyncThunk('TASKS/ADD-TASKS', async (arg: { title: string, TodolistID: string }, {
     dispatch,
     rejectWithValue
 }) => {
@@ -76,7 +76,7 @@ export const AddTaskTC = createAsyncThunk('TASKS/ADD-TASKS', async (arg: { title
     }
 })
 
-export const DeleteTaskTC = createAsyncThunk('TASKS/DELETE-TASK', async (arg: { todolistId: string, taskId: string }, {
+const DeleteTaskTC = createAsyncThunk('TASKS/DELETE-TASK', async (arg: { todolistId: string, taskId: string }, {
     dispatch,
     rejectWithValue
 }) => {
@@ -100,7 +100,7 @@ export const DeleteTaskTC = createAsyncThunk('TASKS/DELETE-TASK', async (arg: { 
     }
 })
 
-export const UpdateTaskTC = createAsyncThunk('TASKS/UPDATE-TASK', async (arg: { id: string, todolistId: string, value: UpdateTaskType }, {
+const UpdateTaskTC = createAsyncThunk('TASKS/UPDATE-TASK', async (arg: { id: string, todolistId: string, value: UpdateTaskType }, {
     dispatch,
     rejectWithValue,
     getState
@@ -198,7 +198,13 @@ const slice = createSlice({
 
 export const tasksReducer = slice.reducer
 
-export const {SetTaskStatusAC} = slice.actions
+export const TaskActions = slice.actions
+
+const {SetTaskStatusAC} = TaskActions
+
+export const AsyncTaskActions={SetTasksTC,AddTaskTC,DeleteTaskTC,UpdateTaskTC}
+
+const{AddTodolistsTC,DeleteTodolistTC,SetTodolistsTC}=AsyncTodoActions
 
 
 

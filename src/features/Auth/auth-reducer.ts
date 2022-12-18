@@ -3,7 +3,7 @@ import {PreloaderAC} from "../../app/app-reducer";
 import {NetworkErrorHandler, ServerErrorHandler} from "../../utils/ErrorHandlers";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
-import {ClearTodolistsAC} from "../Todolists/todolists-reducer";
+import {AllTodosActions} from "../Todolists";
 
 
 export const LoginTC = createAsyncThunk('AUTH/LOGIN', async (values: LoginParamsType, {dispatch, rejectWithValue}) => {
@@ -29,7 +29,7 @@ export const LogoutTC = createAsyncThunk('AUTH/LOGOUT', async (arg, {dispatch, r
         dispatch(PreloaderAC({status: 'loading'}))
         if (res.data.resultCode === 0) {
             dispatch(PreloaderAC({status: 'succeed'}))
-            dispatch(ClearTodolistsAC({value: null}))
+            dispatch(AllTodosActions.TodoActions.ClearTodolistsAC({value: null}))
             return {userID: res.data.resultCode}
         } else {
             ServerErrorHandler<string>(res.data.messages[0], dispatch)

@@ -1,4 +1,6 @@
 import React from 'react'
+import {Navigate} from 'react-router-dom';
+
 import Grid from '@mui/material/Grid';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
@@ -7,12 +9,11 @@ import FormGroup from '@mui/material/FormGroup';
 import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+
 import {useFormik} from "formik";
 import {useSelector} from "react-redux";
-import {LoginTC} from "./auth-reducer";
-import {Navigate} from 'react-router-dom';
-import {selectorIsLogin} from "../../common/selectors/selectorsAll";
-import {useAppDispatch} from "../../utils/hooks/useAppDispatch";
+
+import {selectorIsLogin,useAppDispatch,LoginTC} from "./index";
 
 type FormikErrorType = {
     email?: string
@@ -25,6 +26,7 @@ export const Auth = () => {
     const isLogin = useSelector(selectorIsLogin)
 
     const dispatch = useAppDispatch()
+
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -46,7 +48,6 @@ export const Auth = () => {
             return errors
         },
         onSubmit: values => {
-            // alert(JSON.stringify(values))
             dispatch(LoginTC(values))
             formik.resetForm()
         },
@@ -57,7 +58,7 @@ export const Auth = () => {
         return <Navigate to={'/'}/>
     }
     return (
-        <Grid container justifyContent={'center'}>
+        <Grid container justifyContent={'center'} >
             <Grid item justifyContent={'center'}>
                 <form onSubmit={formik.handleSubmit}>
                     <FormControl>

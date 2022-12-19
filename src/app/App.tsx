@@ -10,12 +10,13 @@ import {Auth, ErrorComponent, Header, selectorIsInitialize, Todolists, useAppDis
 
 function App() {
     const dispatch = useAppDispatch()
+    const isInitialize = useAppSelector(selectorIsInitialize)
 
     useEffect(() => {
         dispatch(InitializeAppTC())
     }, [dispatch])
 
-    const isInitialize = useAppSelector(selectorIsInitialize)
+
 
     if (!isInitialize) {
         return <div

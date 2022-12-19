@@ -28,9 +28,6 @@ export const Todolist = React.memo(function (props: PropsType) {
 
     const {DeleteTodolistTC, ChangeTodolistTitleTC, AddTaskTC, changeTodolistFilterAC} = useActionCreators(actions)
 
-    console.log('Todolist called')
-
-
     const addTaskCallBack = useCallback((title: string) => {
         AddTaskTC({title, TodolistID: id})
     }, [AddTaskTC, id])

@@ -1,7 +1,7 @@
 export {Todolists} from "../features/Todolists/Todolists";
 export {Auth} from "../features/Auth/Auth";
-export {Header} from "../common/Header";
-export {ErrorComponent} from "../common/components/ErrorComponent";
+export {Header} from "../common/components/header/Header";
+export {ErrorComponent} from "../common/components/error/ErrorComponent";
 
 export {NetworkErrorHandler, ServerErrorHandler} from "../utils/ErrorHandlers";
 

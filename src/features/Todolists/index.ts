@@ -6,9 +6,9 @@ export type {TaskType, TodolistType} from '../../api/todolists-api'
 export {TaskStatuses} from '../../api/todolists-api'
 export type{FilterValuesType} from './todolists-reducer'
 
-export {AddItemForm} from '../../common/components/AddItemForm'
+export {AddItemForm} from '../../common/components/addItemForm/AddItemForm'
 
-export {EditableSpan} from '../../common/components/EditableSpan'
+export {EditableSpan} from '../../common/components/editableSpan/EditableSpan'
 
 export {selectorIsLogin, selectorTasks, selectorTodolists} from "../../common/selectors/selectorsAll";
 

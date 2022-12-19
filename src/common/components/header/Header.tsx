@@ -6,10 +6,7 @@ import Menu from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
-import {LogoutTC} from "../features/Auth/auth-reducer";
-import {useAppDispatch} from "../utils/hooks/useAppDispatch";
-import {useAppSelector} from "../utils/hooks/useAppSelector";
-import {selectorIsLoading, selectorIsLogin} from "./selectors/selectorsAll";
+import {LogoutTC,useAppDispatch,useAppSelector,selectorIsLoading, selectorIsLogin} from "./index";
 
 
 export const Header = () => {

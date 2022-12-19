@@ -200,11 +200,11 @@ export const tasksReducer = slice.reducer
 
 export const TaskActions = slice.actions
 
-const {SetTaskStatusAC} = TaskActions
+const { SetTaskStatusAC } = TaskActions
 
-export const AsyncTaskActions={SetTasksTC,AddTaskTC,DeleteTaskTC,UpdateTaskTC}
+export const AsyncTaskActions= { SetTasksTC, AddTaskTC, DeleteTaskTC, UpdateTaskTC }
 
-const{AddTodolistsTC,DeleteTodolistTC,SetTodolistsTC}=AsyncTodoActions
+const { AddTodolistsTC, DeleteTodolistTC, SetTodolistsTC } = AsyncTodoActions
 
 
 

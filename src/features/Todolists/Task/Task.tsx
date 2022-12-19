@@ -2,8 +2,7 @@ import React, {ChangeEvent, useCallback} from 'react'
 import Delete from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import Checkbox from '@mui/material/Checkbox';
-import {AllTodosActions, EditableSpan, TaskStatuses, TaskType} from "./index";
-import {useActionCreators} from "../../../utils/hooks/useActionCreators";
+import {AllTodosActions, EditableSpan, TaskStatuses, TaskType,useActionCreators} from "./index";
 
 type TaskPropsType = {
     task: TaskType
@@ -17,9 +16,9 @@ export const Task = React.memo((props: TaskPropsType) => {
     const {DeleteTaskTC, UpdateTaskTC} = useActionCreators(AllTodosActions.AsyncTaskActions)
 
 
-    const onClickHandler = useCallback(() => {
+    const deleteTaskHandler = () => {
         DeleteTaskTC({taskId: id, todolistId})
-    }, [id, todolistId, DeleteTaskTC]);
+    };
 
     const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         let newIsDoneValue = e.currentTarget.checked
@@ -41,7 +40,7 @@ export const Task = React.memo((props: TaskPropsType) => {
 
         <EditableSpan value={title} onChange={onTitleChangeHandler} entityStatus={entityStatus}/>
 
-        <IconButton onClick={onClickHandler} disabled={entityStatus === 'loading'}>
+        <IconButton onClick={deleteTaskHandler} disabled={entityStatus === 'loading'}>
             <Delete/>
         </IconButton>
     </div>

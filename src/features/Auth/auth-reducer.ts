@@ -1,6 +1,6 @@
-import {AuthAPI, LoginParamsType} from "../../api/auth-api";
-import {PreloaderAC} from "../../app/app-reducer";
-import {NetworkErrorHandler, ServerErrorHandler} from "../../utils/ErrorHandlers";
+import {AuthAPI, LoginParamsType} from "api/auth-api";
+import {PreloaderAC} from "app/app-reducer";
+import {NetworkErrorHandler, ServerErrorHandler} from "utils/ErrorHandlers";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 import {AllTodosActions} from "../Todolists";

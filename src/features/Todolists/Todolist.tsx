@@ -3,10 +3,10 @@ import React, {useCallback} from 'react'
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import Delete from '@mui/icons-material/Delete';
+
 import {Task} from './Task/Task'
-
-
 import {AllTodosActions, EditableSpan} from "./Task";
+
 import {
     AddItemForm,
     FilterValuesType,
@@ -21,7 +21,7 @@ type PropsType = {
     todo: TodolistDomainType
 }
 
-export const Todolist = React.memo(function (props: PropsType) {
+export const Todolist = (props: PropsType)=> {
     const tasks = useAppSelector(selectorTasks)
     const {id, title,filter,entityStatus} = props.todo
     const actions = {...AllTodosActions.AsyncTodoActions, ...AllTodosActions.AsyncTaskActions, ...AllTodosActions.TodoActions}
@@ -89,6 +89,6 @@ export const Todolist = React.memo(function (props: PropsType) {
             </Button>
         </div>
     </div>
-})
+}
 
 

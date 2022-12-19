@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 import TextField from '@mui/material/TextField';
-import {LoadType} from "../../../app/app-reducer";
+import {LoadType} from "app/app-reducer";
 
 type EditableSpanPropsType = {
     value: string

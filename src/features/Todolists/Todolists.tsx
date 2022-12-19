@@ -33,11 +33,11 @@ export const Todolists = () => {
             return
         }
         SetTodolistsTC()
-    }, [isLogin])
+    }, [isLogin,SetTodolistsTC])
 
     const addTodolist = useCallback((title: string) => {
         AddTodolistsTC({title});
-    }, []);
+    }, [ AddTodolistsTC]);
 
 
     if (!isLogin) {

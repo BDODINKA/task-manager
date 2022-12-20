@@ -1,9 +1,10 @@
-/*
-.app {
-  padding: 30px;
-  display: flex;
-}
 
+
+
+.app {
+  background: white;
+}
+/*
 .app > div {
   margin-right: 50px;
 }

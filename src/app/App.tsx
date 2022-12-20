@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import './App.css';
+import style from './App.module.css';
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import {InitializeAppTC} from "./app-reducer";
 import {CircularProgress} from "@mui/material";
@@ -13,7 +13,7 @@ function App() {
     const isInitialize = useAppSelector(selectorIsInitialize)
 
     useEffect(() => {
-        dispatch(InitializeAppTC())
+            dispatch(InitializeAppTC())
     }, [dispatch])
 
 
@@ -24,8 +24,9 @@ function App() {
             <CircularProgress/>
         </div>
     }
+
     return (
-        <div>
+        <div className={style.app}>
             <Header/>
             <BrowserRouter>
                 <Routes>

@@ -12,7 +12,7 @@ import Button from '@mui/material/Button';
 import {useFormik} from "formik";
 import {useSelector} from "react-redux";
 
-import {LoginTC, selectorIsLogin, useAppDispatch,themeAuth} from "./index";
+import {LoginTC, selectorIsLogin, themeAuth, useAppDispatch} from "./index";
 import {ThemeProvider} from "@mui/material";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -57,6 +57,8 @@ export const Auth = () => {
         },
     })
 
+    const disabledRulesBtn = !!formik.errors.password || !!formik.errors.email || formik.values.email === '' || formik.values.password === '' || isLoading === 'loading'
+
     if (isLogin) {
         return <Navigate to={'/'}/>
     }
@@ -90,7 +92,7 @@ export const Auth = () => {
                                 onChange={formik.handleChange}
                                 checked={formik.values.rememberMe}
                             />
-                            <Button type={'submit'} disabled={!!formik.errors.password || !!formik.errors.email || isLoading === 'loading'}>Login</Button>
+                            <Button type={'submit'} disabled={disabledRulesBtn}>Login</Button>
                         </FormGroup>
                     </FormControl>
                 </form>

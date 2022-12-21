@@ -4,7 +4,8 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
-import {LogoutTC,useAppDispatch,useAppSelector,selectorIsLoading, selectorIsLogin} from "./index";
+import {LogoutTC, selectorIsLoading, selectorIsLogin, themeHeader, useAppDispatch, useAppSelector} from "./index";
+import {ThemeProvider} from "@mui/material";
 
 
 export const Header = () => {
@@ -17,14 +18,16 @@ export const Header = () => {
     }
 
     return (
-        <AppBar position="static">
-            <Toolbar>
-                <Typography variant="h4">
-                    Todolist
-                </Typography>
-                {isLogin && <Button color="inherit" onClick={LogoutHandler}>LogOut</Button>}
-            </Toolbar>
-            {loading === 'loading' && <LinearProgress/>}
-        </AppBar>
+        <ThemeProvider theme={themeHeader}>
+            <AppBar >
+                <Toolbar>
+                    <Typography variant="h1">
+                        Todolist
+                    </Typography>
+                    {isLogin && <Button onClick={LogoutHandler}>LogOut</Button>}
+                </Toolbar>
+                {loading === 'loading' && <LinearProgress/>}
+            </AppBar>
+        </ThemeProvider>
     );
 };

@@ -1,5 +1,6 @@
 export const theme ={
     $bg_light:'white',
+    $bg_primary:'blue',
     $bg_btn_primary:'blue',
     $bg_btn_secondary:'white',
     $color_warning:'pink',
@@ -8,5 +9,6 @@ export const theme ={
     $color_primary:'blue',
     $color_font_primary:'black',
     $font_size_primary:'16px',
-    $font_size_secondary:'20px'
+    $font_size_secondary:'20px',
+    $font_size_third:'36px'
 }

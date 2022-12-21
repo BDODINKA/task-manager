@@ -9,7 +9,7 @@ export const themeAuth = createTheme({
                     display: "flex",
                     justifyContent: "center",
                     background: theme.$bg_light,
-                    paddingTop: '60px'
+                    paddingTop: '120px'
                 }
             }
         },

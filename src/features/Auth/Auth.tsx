@@ -16,6 +16,7 @@ import {LoginTC, selectorIsLogin, useAppDispatch,themeAuth} from "./index";
 import {ThemeProvider} from "@mui/material";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
+import {selectorIsLoading} from "../../common/selectors/selectorsAll";
 
 
 type FormikErrorType = {
@@ -26,6 +27,7 @@ type FormikErrorType = {
 
 export const Auth = () => {
     const isLogin = useSelector(selectorIsLogin)
+    const isLoading = useSelector(selectorIsLoading)
 
     const dispatch = useAppDispatch()
 
@@ -54,10 +56,6 @@ export const Auth = () => {
             formik.resetForm()
         },
     })
-
-
-
-
 
     if (isLogin) {
         return <Navigate to={'/'}/>
@@ -92,7 +90,7 @@ export const Auth = () => {
                                 onChange={formik.handleChange}
                                 checked={formik.values.rememberMe}
                             />
-                            <Button type={'submit'} disabled={!!formik.errors.password || !!formik.errors.email}>Login</Button>
+                            <Button type={'submit'} disabled={!!formik.errors.password || !!formik.errors.email || isLoading === 'loading'}>Login</Button>
                         </FormGroup>
                     </FormControl>
                 </form>

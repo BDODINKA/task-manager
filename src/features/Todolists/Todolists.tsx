@@ -14,6 +14,8 @@ import {Todolist} from "./Todolist";
 import Container from "@mui/material/Container";
 
 import {Navigate} from 'react-router-dom';
+import {ThemeProvider} from "@mui/material";
+import {themeTodoLists} from "../../common/theme/themeTodoLists";
 
 
 export type TasksStateType = {
@@ -25,7 +27,6 @@ export const Todolists = () => {
     const todolists = useAppSelector(selectorTodolists)
 
 
-
     const {AddTodolistsTC, SetTodolistsTC} = useActionCreators(AllTodosActions.AsyncTodoActions)
 
     useEffect(() => {
@@ -33,11 +34,11 @@ export const Todolists = () => {
             return
         }
         SetTodolistsTC()
-    }, [isLogin,SetTodolistsTC])
+    }, [isLogin, SetTodolistsTC])
 
     const addTodolist = useCallback((title: string) => {
         AddTodolistsTC({title});
-    }, [ AddTodolistsTC]);
+    }, [AddTodolistsTC]);
 
 
     if (!isLogin) {
@@ -45,22 +46,22 @@ export const Todolists = () => {
     }
 
     return (
-        <Container fixed>
-            <Grid container style={{padding: '20px'}}>
-                <AddItemForm addItem={addTodolist}/>
-            </Grid>
-            <Grid container spacing={3}>
-                {
-                    todolists.map(tl => {
-                        return <Grid item key={tl.id}>
-                            <Paper style={{padding: '10px'}}>
-                                <Todolist todo={tl}/>
-                            </Paper>
-                        </Grid>
-                    })
-                }
-            </Grid>
-        </Container>
-
+        <ThemeProvider theme={themeTodoLists}>
+            <Container>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <AddItemForm addItem={addTodolist}/>
+                    </Grid>
+                    {
+                        todolists.map(tl => {
+                            return <Grid item key={tl.id}>
+                                <Paper style={{padding: '10px'}}>
+                                    <Todolist todo={tl}/>
+                                </Paper>
+                            </Grid>
+                        })}
+                </Grid>
+            </Container>
+        </ThemeProvider>
     );
 };

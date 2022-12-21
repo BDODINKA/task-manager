@@ -37,13 +37,13 @@ export const AddItemForm = React.memo(function (props: AddItemFormPropsType) {
         }
     }
 
-    return <div>
+    return <>
         <TextField variant="outlined"
                    error={!!error}
                    value={title}
                    onChange={onChangeHandler}
                    onKeyDown={onKeyPressHandler}
-                   label="Title"
+                   label={"Title"}
                    helperText={error}
                    disabled={props.entityStatus === 'loading'}
         />
@@ -53,5 +53,5 @@ export const AddItemForm = React.memo(function (props: AddItemFormPropsType) {
         >
             <AddBox/>
         </IconButton>
-    </div>
+    </>
 })

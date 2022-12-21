@@ -55,7 +55,7 @@ export const Todolist = (props: PropsType)=> {
         tasksForTodolist = tasks[id].filter(t => t.status === TaskStatuses.Completed)
     }
 
-    return <div>
+    return <>
         <h3>
             <EditableSpan value={title} onChange={changeTodolistTitleHandler} entityStatus={entityStatus}/>
             <IconButton
@@ -88,7 +88,7 @@ export const Todolist = (props: PropsType)=> {
                     color={'secondary'}>Completed
             </Button>
         </div>
-    </div>
+    </>
 }
 
 

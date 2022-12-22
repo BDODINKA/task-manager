@@ -31,7 +31,7 @@ export const Task = React.memo((props: TaskPropsType) => {
         UpdateTaskTC({id, todolistId, value: {title: newValue}})
     }, [id, todolistId, UpdateTaskTC]);
 
-    return <Grid item xs={1} key={id} className={status === TaskStatuses.Completed ? 'is-done' : ''}>
+    return <Grid item xs={2} key={id} className={status === TaskStatuses.Completed ? 'is-done' : ''}>
         <Checkbox
             checked={status === TaskStatuses.Completed}
             color="primary"

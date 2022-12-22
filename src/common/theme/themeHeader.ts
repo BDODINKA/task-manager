@@ -24,7 +24,8 @@ export const themeHeader = createTheme({
             styleOverrides:{
                 h1:{
                     fontSize:theme.$font_size_third
-                }
+                },
+
             }
         },
         MuiButton: {

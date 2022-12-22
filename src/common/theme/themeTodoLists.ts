@@ -25,28 +25,37 @@ export const themeTodoLists = createTheme({
                     display: 'flex',
                     alignItems: 'center',
                     gap: '25px',
-                    flexBasis:'100% !important',
-                    justifyContent:'flex-start',
+                    flexBasis: '100% !important',
+                    justifyContent: 'flex-start',
                 },
                 "grid-xs-1": {
                     minWidth: '100%',
-                    display:'flex',
-                    justifyContent:'space-between',
+                    display: 'flex',
+                    justifyContent: 'space-between',
                     alignItems: 'center',
+                    wordBreak: 'break-word',
+                },
+                "grid-xs-2": {
+                    minWidth: '100%',
+                    display: 'grid',
+                    gridTemplateColumns: '0.1fr 1fr 0.1fr',
+                    alignItems: 'center',
+                    wordBreak: 'break-word',
                 },
                 item: {
                     width: '100%',
-                    flexBasis:'45%',
-                    display:'flex',
-                    justifyContent:'center',
+                    flexBasis: '45%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    wordBreak: 'break-word',
                     '@media (max-width:1024px)': {
                         width: 'auto',
-                        flexWrap:'wrap',
-                        flexBasis:'45%',
+                        flexWrap: 'wrap',
+                        flexBasis: '45%',
 
                     },
                     '@media (max-width:767px)': {
-                        flexBasis:'100%',
+                        flexBasis: '100%',
                     },
                 },
                 container: {
@@ -59,8 +68,8 @@ export const themeTodoLists = createTheme({
                     padding: '0 5px',
                     '@media (max-width:1024px)': {
                         overflowX: 'initial',
-                        display:'flex',
-                        justifyContent:'center',
+                        display: 'flex',
+                        justifyContent: 'center',
                         gridRowGap: '20px',
                         gridColumnGap: '30px',
                     },
@@ -115,28 +124,81 @@ export const themeTodoLists = createTheme({
                 root: {
                     display: 'flex',
                     flexDirection: 'column',
-                    width:'290px',
-                    height:'min-content',
+                    width: '290px',
+                    height: 'min-content',
                     padding: '10px',
-                    gap:'10px',
+                    gap: '15px',
                     boxShadow: '0px 1px 4px 0px rgba(34, 60, 80, 0.2)',
                 }
-
             }
         },
-        MuiButtonGroup:{
-            styleOverrides:{
-                root:{
-                    justifyContent:'space-between',
+        MuiTypography: {
+            styleOverrides: {
+                h3: {
+                    fontSize: theme.$font_size_secondary,
+                    fontWeight: '600',
+                    wordBreak: 'break-word',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start'
+                },
+            }
+        },
+        MuiCheckbox: {
+            defaultProps: {
+                disableRipple: true,
+            },
+            styleOverrides: {
+                root: {
+                    border:'none',
+                    ":hover":{
+                        background:'transparent',
+                        boxShadow: '0px 1px 4px 0px rgba(34, 60, 80, 0.2)',
+                    },
+                    '.MuiSvgIcon-root':{
+                        color: theme.$bg_btn_primary,
+                    }
+                },
+            }
+        },
+        MuiButtonGroup: {
+            styleOverrides: {
+                root: {
+                    justifyContent: 'space-between',
+
+                    '.MuiButtonGroup-grouped': {
+                        background: theme.$bg_btn_primary,
+                        color:theme.$color_light,
+                        ":nth-child(1)": {
+                            ':hover':{
+                                color:theme.$color_dark,
+                                background: theme.$bg_btn_secondary,
+                                boxShadow: '0px 1px 4px 0px rgba(34, 60, 80, 0.4)',
+                            },
+                        },
+                        ":nth-child(2)": {
+                            ':hover':{
+                                background: theme.$bg_btn_four,
+                                boxShadow: '0px 1px 4px 0px rgba(34, 60, 80, 0.4)',
+                            },
+                        },
+                        ":nth-child(3)": {
+                            ':hover':{
+                                background: theme.$bg_btn_third,
+                                boxShadow: '0px 1px 4px 0px rgba(34, 60, 80, 0.4)',
+                            },
+                        }
+                    }
+
                 }
             }
         },
-        MuiButtonBase:{
-            styleOverrides:{
-                root:{
-                    "&.MuiButtonGroup-grouped":{
-                        border:'1px solid black !important',
-                        borderRadius:'2px !important',
+        MuiButtonBase: {
+            styleOverrides: {
+                root: {
+                    "&.MuiButtonGroup-grouped": {
+                        border: '1px solid black !important',
+                        borderRadius: '2px !important',
                     }
                 }
             }

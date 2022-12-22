@@ -7,7 +7,8 @@ export const themeAuth = createTheme({
             styleOverrides: {
                 root: {
                     display: "flex",
-                    justifyContent: "center",
+                    flexDirection:'column',
+                    alignItems: "center",
                     background: theme.$bg_light,
                     paddingTop: '120px'
                 }
@@ -48,6 +49,12 @@ export const themeAuth = createTheme({
                 h4: {
                     fontSize: theme.$font_size_primary,
                     color: theme.$color_font_primary
+                },
+                h6: {
+                    fontSize: theme.$font_size_primary,
+                    color: theme.$color_font_primary,
+                    width:'30%',
+                    paddingBottom:'10px'
                 },
             }
         },

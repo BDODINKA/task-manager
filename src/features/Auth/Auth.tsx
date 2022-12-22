@@ -58,14 +58,25 @@ export const Auth = () => {
     })
 
     const disabledRulesBtn = !!formik.errors.password || !!formik.errors.email || formik.values.email === '' || formik.values.password === '' || isLoading === 'loading'
+    let isIos = false
 
     if (isLogin) {
         return <Navigate to={'/'}/>
     }
 
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        isIos = true
+    }
+
     return (
         <ThemeProvider theme={themeAuth}>
+
             <Container>
+                {isIos &&
+                    <Typography variant="h6">
+                        if you are using a device on the iOS operating system, you need to go to the browser settings
+                        and turn off Prevent Cross-Site Tracking in the privacy and security tab
+                    </Typography>}
                 <form onSubmit={formik.handleSubmit}>
                     <FormControl>
                         <FormLabel>

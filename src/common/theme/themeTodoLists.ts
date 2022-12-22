@@ -26,16 +26,24 @@ export const themeTodoLists = createTheme({
                     alignItems: 'center',
                     gap: '25px',
                     flexBasis:'100% !important',
+                    justifyContent:'flex-start',
+                },
+                "grid-xs-1": {
+                    minWidth: '100%',
+                    display:'flex',
+                    justifyContent:'space-between',
+                    alignItems: 'center',
                 },
                 item: {
                     width: '100%',
                     flexBasis:'45%',
+                    display:'flex',
+                    justifyContent:'center',
                     '@media (max-width:1024px)': {
                         width: 'auto',
-                        display:'flex',
                         flexWrap:'wrap',
                         flexBasis:'45%',
-                        justifyContent:'center',
+
                     },
                     '@media (max-width:767px)': {
                         flexBasis:'100%',
@@ -110,12 +118,27 @@ export const themeTodoLists = createTheme({
                     width:'290px',
                     height:'min-content',
                     padding: '10px',
+                    gap:'10px',
                     boxShadow: '0px 1px 4px 0px rgba(34, 60, 80, 0.2)',
-                    '@media (max-width:1024px)': {
-                        gap:'10px'
-                    },
                 }
 
+            }
+        },
+        MuiButtonGroup:{
+            styleOverrides:{
+                root:{
+                    justifyContent:'space-between',
+                }
+            }
+        },
+        MuiButtonBase:{
+            styleOverrides:{
+                root:{
+                    "&.MuiButtonGroup-grouped":{
+                        border:'1px solid black !important',
+                        borderRadius:'2px !important',
+                    }
+                }
             }
         }
     }

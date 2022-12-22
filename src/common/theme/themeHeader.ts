@@ -8,7 +8,7 @@ export const themeHeader = createTheme({
                 root: {
                     position: "fixed",
                     height: '60px',
-                    zIndex: '1',
+                    zIndex: '2',
                     background: theme.$bg_primary,
                 }
             }

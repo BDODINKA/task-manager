@@ -6,7 +6,6 @@ import Delete from '@mui/icons-material/Delete';
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import ButtonGroup from "@mui/material/ButtonGroup";
-
 import {Task} from './Task/Task'
 import {AllTodosActions, EditableSpan} from "./Task";
 
@@ -70,26 +69,23 @@ export const Todolist = (props: PropsType) => {
                     <Delete/>
                 </IconButton>
             </Typography>
-            <Grid item>
+            <Grid item xs={1}>
                 <AddItemForm addItem={addTaskCallBack} entityStatus={entityStatus}/>
             </Grid>
-                {
-                    tasksForTodolist.map(t =>
-                        <Task
-                            key={t.id} task={t} todolistId={id}
-                        />)
-                }
+            {
+                tasksForTodolist.map(t =>
+                    <Task
+                        key={t.id} task={t} todolistId={id}
+                    />)
+            }
             <ButtonGroup>
-                <Button variant={filter === 'all' ? 'outlined' : 'text'}
-                        onClick={() => onAllClickHandler('all')}>
+                <Button onClick={() => onAllClickHandler('all')}>
                     All
                 </Button>
-                <Button variant={filter === 'active' ? 'outlined' : 'text'}
-                        onClick={() => onAllClickHandler('active')}>
+                <Button onClick={() => onAllClickHandler('active')}>
                     Active
                 </Button>
-                <Button variant={filter === 'completed' ? 'outlined' : 'text'}
-                        onClick={() => onAllClickHandler('completed')}>
+                <Button onClick={() => onAllClickHandler('completed')}>
                     Completed
                 </Button>
             </ButtonGroup>

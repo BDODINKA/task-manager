@@ -9,7 +9,6 @@ import {
     useAppSelector,
 } from "./index";
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import {Todolist} from "./Todolist";
 import Container from "@mui/material/Container";
 
@@ -55,9 +54,7 @@ export const Todolists = () => {
                     {
                         todolists.map(tl => {
                             return <Grid item key={tl.id}>
-                                <Paper style={{padding: '10px'}}>
-                                    <Todolist todo={tl}/>
-                                </Paper>
+                                <Todolist todo={tl}/>
                             </Grid>
                         })}
                 </Grid>

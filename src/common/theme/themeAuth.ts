@@ -53,7 +53,7 @@ export const themeAuth = createTheme({
                 h6: {
                     fontSize: theme.$font_size_primary,
                     color: theme.$color_font_primary,
-                    width:'30%',
+                    width:'90%',
                     paddingBottom:'10px'
                 },
             }

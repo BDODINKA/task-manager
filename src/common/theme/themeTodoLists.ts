@@ -9,7 +9,6 @@ export const themeTodoLists = createTheme({
                     display: 'flex',
                     margin: '0 auto',
                     minWidth: '100%',
-                    height: '100vh',
                     background: theme.$bg_light,
                     padding: '60px 0 0',
                     overflowX: 'hidden',
@@ -59,7 +58,9 @@ export const themeTodoLists = createTheme({
                     },
                 },
                 container: {
+                    height: '100vh',
                     display: 'grid',
+                    alignContent: 'flex-start',
                     gridTemplateColumns: 'repeat( 10,minmax(300px, 1fr))',
                     gridTemplateRows: '0.1fr 1fr',
                     gridColumnGap: '20px',
@@ -70,8 +71,6 @@ export const themeTodoLists = createTheme({
                         overflowX: 'initial',
                         display: 'flex',
                         justifyContent: 'center',
-                        gridRowGap: '20px',
-                        gridColumnGap: '30px',
                     },
                 },
             }

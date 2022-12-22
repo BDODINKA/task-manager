@@ -1,4 +1,4 @@
-import {NetworkErrorHandler, ServerErrorHandler,IsLoggedIn,AuthAPI} from "./index";
+import {NetworkErrorHandler,IsLoggedIn,AuthAPI} from "./index";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 
@@ -20,8 +20,7 @@ export const InitializeAppTC = createAsyncThunk('APP/INITIALIZE-APP', async (arg
             dispatch(IsLoggedIn({userID: res.data.data.id}))
             return;
         } else {
-            ServerErrorHandler<string>(res.data.messages[0], dispatch)
-            return rejectWithValue(res.data.messages[0])
+            return;
         }
     } catch (reason) {
         NetworkErrorHandler(reason as AxiosError, dispatch)

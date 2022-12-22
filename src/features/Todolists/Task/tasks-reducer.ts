@@ -1,7 +1,7 @@
-import {TaskPriorities, TaskStatuses, todolistsAPI} from '../../../api/todolists-api'
-import {AppRootStateType} from "../../../app/store";
-import {LoadType, PreloaderAC} from "../../../app/app-reducer";
-import {NetworkErrorHandler, ServerErrorHandler} from "../../../utils/ErrorHandlers";
+import {TaskPriorities, TaskStatuses, todolistsAPI} from 'api/todolists-api'
+import {AppRootStateType} from "app/store";
+import {LoadType, PreloaderAC} from "app/app-reducer";
+import {NetworkErrorHandler, ServerErrorHandler} from "utils/ErrorHandlers";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 import {TasksStateType} from "../Todolists";

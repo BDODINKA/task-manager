@@ -1,7 +1,6 @@
 import React from 'react'
 import {Navigate} from 'react-router-dom';
 
-import Grid from '@mui/material/Grid';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -13,7 +12,12 @@ import Button from '@mui/material/Button';
 import {useFormik} from "formik";
 import {useSelector} from "react-redux";
 
-import {selectorIsLogin,useAppDispatch,LoginTC} from "./index";
+import {LoginTC, selectorIsLogin, themeAuth, useAppDispatch} from "./index";
+import {ThemeProvider} from "@mui/material";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import {selectorIsLoading} from "../../common/selectors/selectorsAll";
+
 
 type FormikErrorType = {
     email?: string
@@ -22,8 +26,8 @@ type FormikErrorType = {
 }
 
 export const Auth = () => {
-
     const isLogin = useSelector(selectorIsLogin)
+    const isLoading = useSelector(selectorIsLoading)
 
     const dispatch = useAppDispatch()
 
@@ -53,34 +57,45 @@ export const Auth = () => {
         },
     })
 
+    const disabledRulesBtn = !!formik.errors.password || !!formik.errors.email || formik.values.email === '' || formik.values.password === '' || isLoading === 'loading'
+    let isIos = false
 
     if (isLogin) {
         return <Navigate to={'/'}/>
     }
+
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        isIos = true
+    }
+
     return (
-        <Grid container justifyContent={'center'} >
-            <Grid item justifyContent={'center'}>
+        <ThemeProvider theme={themeAuth}>
+
+            <Container>
+                {isIos &&
+                    <Typography variant="h6">
+                        if you are using a device on the iOS operating system, you need to go to the browser settings
+                        and turn off Prevent Cross-Site Tracking in the privacy and security tab
+                    </Typography>}
                 <form onSubmit={formik.handleSubmit}>
                     <FormControl>
                         <FormLabel>
-                            <p>use common test account credentials:</p>
-                            <p>Email: free@samuraijs.com</p>
-                            <p>Password: free</p>
+                            <Typography variant="h2"> Use common test account credentials:</Typography>
+                            <Typography variant="h4"><strong>Email: </strong>free@samuraijs.com</Typography>
+                            <Typography variant="h4"><strong>Password: </strong>free</Typography>
                         </FormLabel>
                         <FormGroup>
                             <TextField label="Email"
                                        margin="normal"
                                        {...formik.getFieldProps('email')}
+                                       helperText={formik.touched.email && formik.errors.email && formik.errors.email}
                             />
-                            {formik.touched.email && formik.errors.email ?
-                                <div style={{color: "red"}}>{formik.errors.email}</div> : null}
                             <TextField type="password"
                                        label="Password"
                                        margin="normal"
                                        {...formik.getFieldProps('password')}
+                                       helperText={formik.touched.password && formik.errors.password && formik.errors.password}
                             />
-                            {formik.touched.password && formik.errors.password ?
-                                <div style={{color: "red"}}>{formik.errors.password}</div> : null}
                             <FormControlLabel
                                 label={'Remember me'}
                                 control={<Checkbox/>}
@@ -88,11 +103,11 @@ export const Auth = () => {
                                 onChange={formik.handleChange}
                                 checked={formik.values.rememberMe}
                             />
-                            <Button type={'submit'} variant={'contained'} color={'primary'}>Login</Button>
+                            <Button type={'submit'} disabled={disabledRulesBtn}>Login</Button>
                         </FormGroup>
                     </FormControl>
                 </form>
-            </Grid>
-        </Grid>
+            </Container>
+        </ThemeProvider>
     )
 }

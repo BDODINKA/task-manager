@@ -1,6 +1,6 @@
 import {Dispatch} from "redux";
 import {AxiosError} from "axios";
-import {ErrorAC, PreloaderAC} from "../app/app-reducer";
+import {ErrorAC, PreloaderAC} from "app/app-reducer";
 
 
 export const ServerErrorHandler = <T>(data:T, dispatch: Dispatch) => {

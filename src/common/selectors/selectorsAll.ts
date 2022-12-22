@@ -1,4 +1,4 @@
-import {AppRootStateType} from "../../app/store";
+import {AppRootStateType} from "app/store";
 
 const selectorIsLogin = (state:AppRootStateType) => state.auth.isLogin
 

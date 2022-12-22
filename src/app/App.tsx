@@ -1,11 +1,9 @@
 import React, {useEffect} from 'react'
-import './App.css';
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
+import style from './App.module.css';
+import {HashRouter, Navigate, Route, Routes} from "react-router-dom";
 import {InitializeAppTC} from "./app-reducer";
 import {CircularProgress} from "@mui/material";
 import {Auth, ErrorComponent, Header, selectorIsInitialize, Todolists, useAppDispatch, useAppSelector} from './index';
-
-
 
 
 function App() {
@@ -13,7 +11,7 @@ function App() {
     const isInitialize = useAppSelector(selectorIsInitialize)
 
     useEffect(() => {
-        dispatch(InitializeAppTC())
+            dispatch(InitializeAppTC())
     }, [dispatch])
 
 
@@ -24,17 +22,18 @@ function App() {
             <CircularProgress/>
         </div>
     }
+
     return (
-        <div>
+        <div className={style.app}>
             <Header/>
-            <BrowserRouter>
+            <HashRouter>
                 <Routes>
                     <Route path={'/Auth'} element={<Auth/>}/>
                     <Route path={'/404'} element={<h1>404:Page not Found</h1>}/>
                     <Route path={'*'} element={<Navigate to={'/404'}/>}/>
                     <Route path={'/'} element={<Todolists/>}/>
                 </Routes>
-            </BrowserRouter>
+            </HashRouter>
             <ErrorComponent />
         </div>
     );

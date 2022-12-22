@@ -1,6 +1,6 @@
-import {AuthAPI, LoginParamsType} from "../../api/auth-api";
-import {PreloaderAC} from "../../app/app-reducer";
-import {NetworkErrorHandler, ServerErrorHandler} from "../../utils/ErrorHandlers";
+import {AuthAPI, LoginParamsType} from "api/auth-api";
+import {PreloaderAC} from "app/app-reducer";
+import {NetworkErrorHandler, ServerErrorHandler} from "utils/ErrorHandlers";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 import {AllTodosActions} from "../Todolists";
@@ -8,8 +8,8 @@ import {AllTodosActions} from "../Todolists";
 
 export const LoginTC = createAsyncThunk('AUTH/LOGIN', async (values: LoginParamsType, {dispatch, rejectWithValue}) => {
     const res = await AuthAPI.login(values)
+    dispatch(PreloaderAC({status: 'loading'}))
     try {
-        dispatch(PreloaderAC({status: 'loading'}))
         if (res.data.resultCode === 0) {
             dispatch(PreloaderAC({status: 'succeed'}))
             return {userID: res.data.data.userId}

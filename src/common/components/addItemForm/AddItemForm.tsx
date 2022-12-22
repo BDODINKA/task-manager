@@ -2,7 +2,7 @@ import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import {AddBox} from '@mui/icons-material';
-import {LoadType} from "../../../app/app-reducer";
+import {LoadType} from "app/app-reducer";
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
@@ -37,13 +37,13 @@ export const AddItemForm = React.memo(function (props: AddItemFormPropsType) {
         }
     }
 
-    return <div>
+    return <>
         <TextField variant="outlined"
                    error={!!error}
                    value={title}
                    onChange={onChangeHandler}
                    onKeyDown={onKeyPressHandler}
-                   label="Title"
+                   label={"Title"}
                    helperText={error}
                    disabled={props.entityStatus === 'loading'}
         />
@@ -53,5 +53,5 @@ export const AddItemForm = React.memo(function (props: AddItemFormPropsType) {
         >
             <AddBox/>
         </IconButton>
-    </div>
+    </>
 })

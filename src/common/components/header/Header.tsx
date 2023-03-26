@@ -22,7 +22,7 @@ export const Header = () => {
             <AppBar >
                 <Toolbar>
                     <Typography variant="h1">
-                        Todolist
+                        Task-Manager
                     </Typography>
                     {isLogin && <Button onClick={LogoutHandler}>LogOut</Button>}
                 </Toolbar>

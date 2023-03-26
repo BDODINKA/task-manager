@@ -1,6 +1,6 @@
 {
-  "name": "todo-v2.0",
-  "homepage": "https://bdodinka.github.io/todolist-ts",
+  "name": "task-manager",
+  "homepage": "https://bdodinka.github.io/task-manager",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
